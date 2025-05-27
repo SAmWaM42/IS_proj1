@@ -49,7 +49,7 @@ function Form({ fields, onSubmit })
                                      
                             }
     
-                          {content}
+                          
                         
                         </div>
 
