@@ -58,7 +58,7 @@ function Form({ fields, onSubmit })
 
                 }
                 <div className="button-container">
-                    <Button type="submit" design="submit-button" />
+                    <Button type="submit_button" design="submit_button" />
                 </div>
 
             </form>

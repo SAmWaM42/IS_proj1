@@ -71,4 +71,7 @@ app.post('/cart', (req, res) => {
          req.session.cart_list.push(item)
     }
 }); 
+app.get('/submit_button', (req, res) => {
+    res.json({ message: 'This is the submit button!' });
+});
 

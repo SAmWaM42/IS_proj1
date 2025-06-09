@@ -6,9 +6,10 @@ const cors = require('cors');
 const path = require('path');
 const app = express();
 const port = 5000;
+const url='mongodb+srv://sam42:Family567@projectclus0.nxy3i5v.mongodb.net/?retryWrites=true&w=majority&appName=ProjectClus0';
 
 // MongoDB connection
-mongoose.connect('mongodb://localhost:27017/thriftDB', {
+mongoose.connect(url, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then(() => console.log("✅ MongoDB connected"))
