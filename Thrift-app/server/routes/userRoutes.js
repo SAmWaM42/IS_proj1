@@ -1,6 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
-const User = require('../../models/user'); // adjust path if needed
+const User = require('../Schemas/UserSchema'); // Adjust the path as necessary
 const router = express.Router();
 
 // REGISTER
@@ -60,6 +60,9 @@ router.get('/me', async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: 'Error fetching user', error: err.message });
   }
+});
+router.get('/test', (req, res) => {
+  res.json({ message: 'User routes are working!' });
 });
 
 module.exports = router;
