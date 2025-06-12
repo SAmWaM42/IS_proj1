@@ -15,12 +15,13 @@ function Login()
    
     }
     const formdata = [
-        { label: 'Username', type: 'text', name: 'username', key: 'username' },
+       
+        { label: 'Email', type: 'email', name: 'email', key: 'email' },
         { label: 'Password', type: 'password', name: 'password', key: 'password' },
-        { label: 'Email', type: 'email', name: 'email', key: 'email' }
+       
     ];
      
-    const dest_url='login';
+    const dest_url='user/login';
 
 
 

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import Form  from "../Components/Form";
-import './Login.css';
+import './Register.css';
 
 
 function Register()
@@ -15,16 +15,15 @@ function Register()
    
     }
     const formdata = [
-        { label: 'Username', type: 'text', name: 'username', key: 'username' },
-        { label: 'Password', type: 'password', name: 'password', key: 'password' },
+        { label: 'name', type: 'text', name: 'name', key: 'username' },
         { label: 'Email', type: 'email', name: 'email', key: 'email' }
     ];
-
+    const dest_url="user/register"; // This should be the endpoint for registration
 
 
     return(
 
-        <Form formData={formdata} button_data={button_data}></Form>
+        <Form formData={formdata} button_data={button_data} dest_url={dest_url}></Form>
     );
 
 

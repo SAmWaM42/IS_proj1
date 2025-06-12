@@ -1,9 +1,12 @@
+import { Navigate, NavigationType } from "react-router-dom";
 import Button from "./Button";
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 
 function Form({formData,button_data,dest_url})
 {
-
+const navigate = useNavigate();
     const [formValues, setFormValues] = useState(() => {
         const initialValues = {};
         formData.forEach(field => {
@@ -11,13 +14,12 @@ function Form({formData,button_data,dest_url})
         });
         return initialValues;
     });
-    const url=`http://localhost:5000/user/${dest_url}`;
+    const url=`http://localhost:5000/${dest_url}`;
     var  method;
     console.log(url);
-    if(dest_url=== 'login'||dest_url === 'register')
-    {
-        method ='POST';
-    };
+
+ method ='POST';
+    
     console.log(method);	
  
      const handleSubmit = async (event) => {
@@ -25,6 +27,7 @@ function Form({formData,button_data,dest_url})
 
         console.log("Submitting data:", formValues);
         console.log("--- handleSubmit TRIGGERED! ---"); 
+        
 
         try {
             const response = await fetch(url, {
@@ -39,12 +42,17 @@ function Form({formData,button_data,dest_url})
 
             if (response.ok) {
                 console.log('Server response (success):', data);
+                if(data.redirect) {
+
+           navigate(data.redirect);
+        }
                 alert(data.message || 'Operation successful!');
                 // You might want to redirect, show success message, clear form, etc.
             } else {
                 console.error('Server response (error):', data);
                 alert(data.message || 'Operation failed.');
             }
+            
         } catch (error) {
             console.error('Network or client-side error:', error);
             alert('A network error occurred. Please try again.');

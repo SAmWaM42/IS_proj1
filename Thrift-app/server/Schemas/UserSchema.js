@@ -1,3 +1,4 @@
+const { configDotenv } = require('dotenv');
 const mongoose = require('mongoose');
 const User= new mongoose.Schema({
   name: {
@@ -13,16 +14,24 @@ const User= new mongoose.Schema({
     lowercase: true
   },
   passwordHash: {
-    type: String,
-    required: true,
+    type: String, 
+    default: null,
+    required: false,
     minlength: 6
+   
   },
   role:{
     type: String,
     enum: ['buyer','seller','admin'],
-    default: 'user'
+    default: 'buyer'
 
   },
+  code:{
+    type: String,
+    required: false,
+    default: null
+  }
+  ,
   createdAt: {
     type: Date,
     default: Date.now
