@@ -25,13 +25,8 @@ const User= new mongoose.Schema({
     enum: ['buyer','seller','admin'],
     default: 'buyer'
 
-  },
-  code:{
-    type: String,
-    required: false,
-    default: null
   }
-  ,
+,
   createdAt: {
     type: Date,
     default: Date.now

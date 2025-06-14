@@ -1,10 +1,28 @@
-require('dotenv').config(); // Load environment variables from .env file
+ // Import express-session 
 const express = require('express');
+
+// Load environment variables from .env file
+ 
+require('dotenv').config();
+
+
 const bcrypt = require('bcrypt');
 const User = require('../Schemas/UserSchema'); // Adjust the path as necessary
 const OTP = require('../Schemas/OTP'); // Adjust the path as necessary
-const nodemailer = require('nodemailer'); // For sending emails
+const nodemailer = require('nodemailer');// For sending emails
 const router = express.Router();
+const multer = require('multer'); // For handling file uploads
+const path= require('path'); // For handling file path
+const storage=multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(__dirname,' ..', 'images'); // Directory to save uploaded files
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname)); // Append original file extension
+    }
+});
+const upload = multer({ storage: storage });
 const transporter = nodemailer.createTransport({
     host:'smtp.gmail.com',
     port: 587,
@@ -25,14 +43,14 @@ async function sendOTPEmail(email, code) {
       from: process.env.EMAIL_USER, // Sender address
       to: email, // List of recipients
       subject: 'Your OTP Code', // Subject line
-      text: `Your OTP code is ${code} it will expire in 5 minutes`, // Plain text body
+      text: `You are registering to ${process.env.APP_NAME} your OTP code is ${code} it will expire in 5 minutes`, // Plain text body
       html: `<p>Your OTP code is <strong>${code}</strong> it will expire in 5 minutes</p>` // HTML body
     });
       console.log(`OTP sent to ${email}`);
   
 };
 // REGISTER
-router.post('/register', async (req, res) => {
+router.post('/register',upload.none(), async (req, res) => {
   const {name, email} = req.body;
   console.log(req.body);
   try {
@@ -56,7 +74,7 @@ router.post('/register', async (req, res) => {
   }
 });
 //2FA confirmation endpoint
-router.post('/2FA', async (req, res) => {
+router.post('/2FA',upload.none(), async (req, res) => {
   const {code, password ,confirm_password } = req.body;
   console.log(req.body);
   try {
@@ -88,9 +106,9 @@ router.post('/2FA', async (req, res) => {
 
 
 // LOGIN
-router.post('/login', async (req, res) => {
+router.post('/login',upload.none() ,async (req, res) => {
   console.log(req.body);
-  const { email, password } = req.body;
+  const {email, password } = req.body;
   try {
     const user = await User.findOne({ email });
     if (!user) return res.status(401).json({ message: 'Invalid credentials' });
@@ -106,7 +124,7 @@ router.post('/login', async (req, res) => {
 });
 
 // LOGOUT
-router.get('/logout', (req, res) => {
+router.get('/logout',upload.none(), (req, res) => {
   req.session.destroy(err => {
     if (err) return res.status(500).json({ message: 'Logout failed' });
     res.clearCookie('connect.sid');
@@ -121,10 +139,12 @@ router.get('/me', async (req, res) => {
   }
 
   try {
-    const user = await User.findById(req.session.user.id).populate('products');
+    const user = await User.findById(req.session.user.id);
+    console.log("Fetched user:", user);
     if (!user) return res.status(404).json({ message: 'User not found' });
     res.json(user);
   } catch (err) {
+
     res.status(500).json({ message: 'Error fetching user', error: err.message });
   }
 });

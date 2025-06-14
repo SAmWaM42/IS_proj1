@@ -7,6 +7,8 @@ import Login from './Login.js';
 import Register from './Register.js';
 import Navbar from '../Components/Navbar.js';
 import Auth from './auth.js';
+import Dashboard from './Dashboard.js';
+import Browse from './Browse.js';
 
 
 function App() {
@@ -15,7 +17,9 @@ function App() {
         //modify this to add more elements to the navbar
         { key: 'home', Label: 'Home', destination: '/' },
         { key: 'login', Label: 'Login', destination: '/Login' },
-        { key: 'register', Label: 'Register', destination: '/Register' }
+        { key: 'register', Label: 'Register', destination: '/Register' },
+        { key: 'dashboard', Label: 'Dashboard', destination: '/Dashboard' },
+        {key:'browse', Label: 'Browse', destination: '/Browse'},
 
 
 
@@ -43,6 +47,8 @@ function App() {
                     <Route path="/Login" element={<Login />} />
                     <Route path="/Register" element={<Register />} />
                     <Route path="/auth" element={<Auth />} />
+                    <Route path="/Dashboard" element={<Dashboard></Dashboard>} />
+                    <Route path="/Browse" element={<Browse></Browse>} />
 
 
 
