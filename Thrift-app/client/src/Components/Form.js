@@ -124,4 +124,3 @@ const handleFileChange = (e) => {
 }
 
 export default Form;
-import'Thrift-app\client\src\components\Form.css';

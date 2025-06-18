@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './Home.js';
 import Login from './Login.js';
 import Register from './Register.js';
-import Navbar from '../components/Navbar.js';
+import Navbar from '../Components/Navbar.js';
 import Auth from './auth.js';
 import Dashboard from './Dashboard.js';
 import Browse from './Browse.js';
@@ -61,4 +61,4 @@ function App() {
 
 
 export default App;
-import 'Thrift-app\client\src\Pages\App.css';
+

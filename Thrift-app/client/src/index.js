@@ -1,8 +1,7 @@
-require('dotenv').config(); //addition
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './Pages/App';
+import App from './Pages/App.js';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router } from 'react-router-dom';
 
@@ -23,7 +22,3 @@ reportWebVitals();
 
 
 //addition
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})

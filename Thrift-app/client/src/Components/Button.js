@@ -16,4 +16,3 @@ function Button(data)
 }
 
 export default Button;
-import 'Thrift-app\client\src\components\Button.css';

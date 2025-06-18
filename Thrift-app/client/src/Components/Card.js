@@ -24,4 +24,3 @@ function Card({data}) {
 }
 
 export default Card;
-import 'Thrift-app\client\src\components\Card.css';
