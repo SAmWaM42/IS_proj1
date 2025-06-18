@@ -1,8 +1,8 @@
-import Button from "../Components/Button";
+import Button from "../components/Button";
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
-import Form  from "../Components/Form";
+import Form  from "../components/Form";
 import './Login.css';
 
 

@@ -26,3 +26,4 @@ function Navbar({link_data})
 };
 
 export default Navbar;
+import 'Thrift-app\client\src\components\Navbar.css';
