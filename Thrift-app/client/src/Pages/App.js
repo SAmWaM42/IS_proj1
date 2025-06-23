@@ -9,6 +9,7 @@ import Navbar from '../Components/Navbar.js';
 import Auth from './auth.js';
 import Dashboard from './Dashboard.js';
 import Browse from './Browse.js';
+import IndividualProduct from './IndividualProduct.js';
 
 
 function App() {
@@ -49,6 +50,9 @@ function App() {
                     <Route path="/auth" element={<Auth />} />
                     <Route path="/Dashboard" element={<Dashboard></Dashboard>} />
                     <Route path="/Browse" element={<Browse></Browse>} />
+                    <Route  path="/product/:id" element= {<IndividualProduct></IndividualProduct>} />
+                       <Route  path="/user/:userId" element= {<Dashboard></Dashboard>} />
+                    
 
 
 

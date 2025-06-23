@@ -51,5 +51,14 @@ router.get('/', async (req, res) => {
   const products = await Product.find();
   res.json(products);
 });
+router.get('/:id', async (req, res) => {
+
+const {id}=req.params;
+  console.log(id);
+  const products = await Product.findById(id);
+  res.json(products);
+});
+
+
 
 module.exports = router;

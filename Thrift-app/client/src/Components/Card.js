@@ -1,16 +1,19 @@
 
 import './Card.css';
+import { Link } from 'react-router-dom';
 function Card({data}) {
     console.log(data)
+    const productUrl = `/product/${data._id}`;
 
     return (
-        <div>
+        <div className="card">
+
                     
                         <div>
                             <img src={`http://localhost:5000/${data.imageUrl}`} alt={data.name} className="card-image" key={data.id} />
                         </div>
                         <div className="card-content">
-                            <h2 className="card-title">{data.name}</h2>
+                         <Link to={productUrl}><h2 className="card-title">{data.name}</h2> </Link>
                             <p className="card-description">{data.description}</p>
                             <p className="card-price">{data.price}</p>
                         </div>

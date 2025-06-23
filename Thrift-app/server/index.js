@@ -30,7 +30,7 @@ app.use(session({
   }
 }));
 
-const uri = process.env.MONGODB_PRIVATE_URI 
+const uri = process.env.MONGODB_PRIVATE_URI
 console.log(uri);// Use environment variable for production
 mongoose.connect(uri)
     .then(() => console.log('MongoDB connection established successfully!'))

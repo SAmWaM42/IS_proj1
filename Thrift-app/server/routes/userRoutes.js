@@ -1,57 +1,59 @@
- // Import express-session 
+// Import express-session 
 const express = require('express');
 
 // Load environment variables from .env file
- 
+
 require('dotenv').config();
 
 
 const bcrypt = require('bcrypt');
 const User = require('../Schemas/UserSchema'); // Adjust the path as necessary
+const chatbox = require('../Schemas/messages');
 const OTP = require('../Schemas/OTP'); // Adjust the path as necessary
 const nodemailer = require('nodemailer');// For sending emails
 const router = express.Router();
 const multer = require('multer'); // For handling file uploads
-const path= require('path'); // For handling file path
-const storage=multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(__dirname,' ..', 'images'); // Directory to save uploaded files
-    },
-    filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname)); // Append original file extension
-    }
+const path = require('path'); // For handling file path
+const { default: mongoose } = require('mongoose');
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(__dirname, ' ..', 'images'); // Directory to save uploaded files
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname)); // Append original file extension
+  }
 });
 const upload = multer({ storage: storage });
 const transporter = nodemailer.createTransport({
-    host:'smtp.gmail.com',
-    port: 587,
-    secure: false, // true for 465, false for other ports
-    auth: {
-        user: process.env.EMAIL_USER, // Your email address
-        pass: process.env.EMAIL_PASS // Your email password or app password
-    },
-    tls:
-    {
-        rejectUnauthorized: false // This is to allow self-signed certificates, not recommended for production
-    }
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false, // true for 465, false for other ports
+  auth: {
+    user: process.env.EMAIL_USER, // Your email address
+    pass: process.env.EMAIL_PASS // Your email password or app password
+  },
+  tls:
+  {
+    rejectUnauthorized: false // This is to allow self-signed certificates, not recommended for production
+  }
 
 });
 async function sendOTPEmail(email, code) {
-  
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER, // Sender address
-      to: email, // List of recipients
-      subject: 'Your OTP Code', // Subject line
-      text: `You are registering to ${process.env.APP_NAME} your OTP code is ${code} it will expire in 5 minutes`, // Plain text body
-      html: `<p>Your OTP code is <strong>${code}</strong> it will expire in 5 minutes</p>` // HTML body
-    });
-      console.log(`OTP sent to ${email}`);
-  
+
+  await transporter.sendMail({
+    from: process.env.EMAIL_USER, // Sender address
+    to: email, // List of recipients
+    subject: 'Your OTP Code', // Subject line
+    text: `You are registering to ${process.env.APP_NAME} your OTP code is ${code} it will expire in 5 minutes`, // Plain text body
+    html: `<p>Your OTP code is <strong>${code}</strong> it will expire in 5 minutes</p>` // HTML body
+  });
+  console.log(`OTP sent to ${email}`);
+
 };
 // REGISTER
-router.post('/register',upload.none(), async (req, res) => {
-  const {name, email} = req.body;
+router.post('/register', upload.none(), async (req, res) => {
+  const { name, email } = req.body;
   console.log(req.body);
   try {
     const existingUser = await User.findOne({ email });
@@ -59,7 +61,7 @@ router.post('/register',upload.none(), async (req, res) => {
     const currentDate = new Date();
     const da = currentDate.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
     const code = Math.floor(100000 + Math.random() * 900000); // Generate a 6-digit code
-    const user = new User({ name:name, email:email}); // Default role can be set to 'buyer' or any other role as needed
+    const user = new User({ name: name, email: email }); // Default role can be set to 'buyer' or any other role as needed
     const otp = new OTP({ userId: user._id, code: code });
     await user.save();
     await otp.save();
@@ -67,34 +69,34 @@ router.post('/register',upload.none(), async (req, res) => {
     //OTP sending logic
     const emailSent = await sendOTPEmail(email, code);
 
-    res.status(201).json({ message: 'Data succesfully sent.', userId: user._id ,redirect:'/auth'});
-    
+    res.status(201).json({ message: 'Data succesfully sent.', userId: user._id, redirect: '/auth' });
+
   } catch (err) {
     res.status(500).json({ message: 'Registration error or Email not sent', error: err.message });
   }
 });
 //2FA confirmation endpoint
-router.post('/2FA',upload.none(), async (req, res) => {
-  const {code, password ,confirm_password } = req.body;
+router.post('/2FA', upload.none(), async (req, res) => {
+  const { code, password, confirm_password } = req.body;
   console.log(req.body);
   try {
-   const otp = await OTP.findOne({ code: code });
+    const otp = await OTP.findOne({ code: code });
     if (!otp) return res.status(400).json({ message: 'Invalid or Expired OTP code' });
-   
+
     const userId = otp.userId;
-   if( password !== confirm_password) {
+    if (password !== confirm_password) {
       return res.status(400).json({ message: 'Passwords do not match' });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
-     const updatedUser = await User.findByIdAndUpdate(
-            userId,
-            { passwordHash: hashedPassword }, // The field name is 'passwordHash' from your schema!
-            { new: true, runValidators: true } // 'new: true' returns the updated document, 'runValidators: true' runs schema validations
-        );
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { passwordHash: hashedPassword }, // The field name is 'passwordHash' from your schema!
+      { new: true, runValidators: true } // 'new: true' returns the updated document, 'runValidators: true' runs schema validations
+    );
 
-        if (!updatedUser) {
-            return res.status(404).json({ message: 'User not found.' });
-        }
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
     req.session.user = { id: updatedUser._id, name: updatedUser.name };
     await OTP.deleteOne({ _id: otp._id }); // Delete the OTP after successful confirmation
     res.status(201).json({ message: 'User registered', userId: updatedUser._id });
@@ -106,9 +108,9 @@ router.post('/2FA',upload.none(), async (req, res) => {
 
 
 // LOGIN
-router.post('/login',upload.none() ,async (req, res) => {
+router.post('/login', upload.none(), async (req, res) => {
   console.log(req.body);
-  const {email, password } = req.body;
+  const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
     if (!user) return res.status(401).json({ message: 'Invalid credentials' });
@@ -117,14 +119,14 @@ router.post('/login',upload.none() ,async (req, res) => {
     if (!match) return res.status(401).json({ message: 'Invalid credentials' });
 
     req.session.user = { id: user._id, name: user.name };
-    res.status(200).json({ message: 'Login successful', userId: user._id  });
+    res.status(200).json({ message: 'Login successful', userId: user._id });
   } catch (err) {
     res.status(500).json({ message: 'Login error', error: err.message });
   }
 });
 
 // LOGOUT
-router.get('/logout',upload.none(), (req, res) => {
+router.get('/logout', upload.none(), (req, res) => {
   req.session.destroy(err => {
     if (err) return res.status(500).json({ message: 'Logout failed' });
     res.clearCookie('connect.sid');
@@ -148,9 +150,105 @@ router.get('/me', async (req, res) => {
     res.status(500).json({ message: 'Error fetching user', error: err.message });
   }
 });
+
+router.get('/:id', async (req, res) => {
+const {id}=req.params;
+
+  try {
+    const user = await User.findById(id);
+    console.log("Fetched user:", user);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json(user);
+  } catch (err) {
+
+    res.status(500).json({ message: 'Error fetching user', error: err.message });
+  }
+});
 router.get('/test', (req, res) => {
   res.json({ message: 'User routes are working!' });
 });
+router.get('/chats', async (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ message: 'Not logged in' });
+  }
+  var chatdata = [{
+
+    messages: [],
+    Participants: [
+      {
+        id: mongoose.Types.ObjectId,
+        name: ''
+      }
+    ],
+
+  }];
+
+  try {
+    const Chats = await chatbox.find({ ParticipantsId: req.session.user.id });
+    console.log("Fetched chats:", Chats);
+
+
+    var Chatparticipants = await User.find({ _id: { $in: Chats.flatMap(chat => chat.ParticipantsId) } });
+    console.log("Fetched participants:", Chatparticipants);
+    console.log("Fetched relevant users:", Chats);
+    if (Chats.length === 0) return res.status(404).json({ message: 'No chats found' });
+    Chats.forEach(chat => {
+
+      chatdata.Participants = chat.ParticipantsId.map(participantId => ({
+
+        id: participantId,
+        name: ''
+
+
+      }));
+      chatdata.messages = chat.message;
+    });
+
+    Chatparticipants.forEach(user => {
+      chatdata.Participants.forEach(participant => {
+        if (participant.id.toString() === user._id.toString()) {
+          participant.name = user.name; // Assuming User schema has a 'name' field
+        }
+      });
+    });
+
+    res.json(chatdata);
+
+  } catch (err) {
+
+    res.status(500).json({ message: 'Error fetching user', error: err.message });
+  }
+});
+
+
+router.post('/chats:chatId', async (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ message: 'Not logged in' });
+  }
+  const { chatId } = req.params;
+  const { text } = req.body;
+
+  try {
+    const chat = await chatbox.findById(chatId);
+    if (!chat) return res.status(404).json({ message: 'Chat not found' });
+
+    const newMessage = {
+      text,
+      isRead: false,
+      isDelivered: false,
+      timestamp: new Date()
+    };
+
+    chat.message.push(newMessage);
+    await chat.save();
+
+    res.json({ message: 'Message sent', newMessage });
+  } catch (err) {
+    res.status(500).json({ message: 'Error sending message', error: err.message });
+  }
+
+});
+
 
 module.exports = router;
 
