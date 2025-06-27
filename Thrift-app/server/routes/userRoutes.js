@@ -15,6 +15,7 @@ const router = express.Router();
 const multer = require('multer'); // For handling file uploads
 const path = require('path'); // For handling file path
 const { default: mongoose } = require('mongoose');
+const messages = require('../Schemas/messages');
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(__dirname, ' ..', 'images'); // Directory to save uploaded files
@@ -151,77 +152,117 @@ router.get('/me', async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
-const {id}=req.params;
 
-  try {
-    const user = await User.findById(id);
-    console.log("Fetched user:", user);
-    if (!user) return res.status(404).json({ message: 'User not found' });
-    res.json(user);
-  } catch (err) {
-
-    res.status(500).json({ message: 'Error fetching user', error: err.message });
-  }
-});
 router.get('/test', (req, res) => {
   res.json({ message: 'User routes are working!' });
+});
+
+router.post('/chats' ,async (req, res) => 
+{
+  try{
+  const me=req.session.user.id;
+  const {otherUser}=req.body;
+   if (!otherUser || !mongoose.Types.ObjectId.isValid(otherUser)) {
+            return res.status(400).json({ message: 'Invalid or missing otherUserId' });
+        }
+    let Chatbox = await chatbox.findOne({
+            ParticipantsId: { $all: [me, otherUser], $size: 2 }
+        });
+        if(Chatbox)
+        {
+             return res.status(200).json({ chatId:  Chatbox._id.toString(), message: 'Existing chat found' });
+        }
+
+        Chatbox=new chatbox
+        ({
+          ParticipantsId:[me,otherUser],
+          messages:[]
+        });
+        await Chatbox.save();
+         res.status(201).json({ chatId: Chatbox._id.toString(), message: 'New chat created' });
+      }catch(err)
+      {
+         console.error('Error creating or getting chatbox:', err);
+        res.status(500).json({ message: 'Server error creating or getting chatbox', error: err.message });
+
+      }
+
+
+
 });
 router.get('/chats', async (req, res) => {
   if (!req.session.user) {
     return res.status(401).json({ message: 'Not logged in' });
   }
-  var chatdata = [{
-
-    messages: [],
-    Participants: [
-      {
-        id: mongoose.Types.ObjectId,
-        name: ''
-      }
-    ],
-
-  }];
 
   try {
-    const Chats = await chatbox.find({ ParticipantsId: req.session.user.id });
-    console.log("Fetched chats:", Chats);
+    const userChats = await chatbox.find({ ParticipantsId: req.session.user.id }).populate('ParticipantsId', 'name');
+    console.log("Fetched chats:", userChats);
 
+    const structuredChats = userChats.map(chat => {
 
-    var Chatparticipants = await User.find({ _id: { $in: Chats.flatMap(chat => chat.ParticipantsId) } });
-    console.log("Fetched participants:", Chatparticipants);
-    console.log("Fetched relevant users:", Chats);
-    if (Chats.length === 0) return res.status(404).json({ message: 'No chats found' });
-    Chats.forEach(chat => {
-
-      chatdata.Participants = chat.ParticipantsId.map(participantId => ({
-
-        id: participantId,
-        name: ''
-
-
+      const participants = chat.ParticipantsId.filter(p => p && p.name).map(p => ({
+        _id: p._id.toString(), // Convert ObjectId to string for consistency
+        name: p.name,
       }));
-      chatdata.messages = chat.message;
-    });
+      let chatName = 'GroupChat';
+      const otherParticipant = participants.find(p => p._id !== req.session.user.id.toString());
+      
+      
+      if (participants.length === 2) {
+        chatName = otherParticipant.name;
+      }
+      else {
+        chatName = "Group Chat";
+      }
 
-    Chatparticipants.forEach(user => {
-      chatdata.Participants.forEach(participant => {
-        if (participant.id.toString() === user._id.toString()) {
-          participant.name = user.name; // Assuming User schema has a 'name' field
-        }
-      });
-    });
+   
+      
 
-    res.json(chatdata);
+      return {
+        _id: chat._id.toString(), // The chatbox ID
+        name: chatName, // The derived name for the frontend list
+        messages: chat.message.map(msg => ({ // Ensure messages are properly formatted too
+          SenderId: msg.SenderId.toString(),
+          text: msg.text,
+          timestamp: msg.timestamp
+        })),
+        participants: participants, // Full participant details
+        lastMessageAt: chat.lastMessageAt,
+        // Add any other fields from your chatbox model that the frontend needs
+      };
+    });
+res.status(200).json(structuredChats);
 
   } catch (err) {
+  console.error("Error in /chats GET endpoint:", err); // Log the basic error object
+        console.error("Full Stack Trace:", err.stack);     // <--- THIS IS WHAT WE NEED!
+        // --- END CRITICAL CHANGE ---
 
-    res.status(500).json({ message: 'Error fetching user', error: err.message });
+        res.status(500).json({ message: 'Error fetching user', error: err.message });
+   
   }
+});
+router.get('/chats/:chatId' ,async (req, res) => 
+{
+  const {chatId}=req.params;
+  try{
+  
+    let Chatbox = await chatbox.findById(chatId);
+       return res.status(200).json(Chatbox);
+
+      }catch(err)
+      {
+         console.error('Error creating or getting chatbox:', err);
+        res.status(500).json({ message: 'Server error creating or getting chatbox', error: err.message });
+
+      }
+
 });
 
 
-router.post('/chats:chatId', async (req, res) => {
+
+router.post('/chats/:chatId', async (req, res) => {
   if (!req.session.user) {
     return res.status(401).json({ message: 'Not logged in' });
   }
@@ -234,6 +275,7 @@ router.post('/chats:chatId', async (req, res) => {
 
     const newMessage = {
       text,
+      SenderId:new mongoose.Types.ObjectId(req.session.user.id),
       isRead: false,
       isDelivered: false,
       timestamp: new Date()
@@ -247,6 +289,19 @@ router.post('/chats:chatId', async (req, res) => {
     res.status(500).json({ message: 'Error sending message', error: err.message });
   }
 
+});
+router.get('/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await User.findById(id);
+    console.log("Fetched user:", user);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json(user);
+  } catch (err) {
+
+    res.status(500).json({ message: 'Error fetching user', error: err.message });
+  }
 });
 
 

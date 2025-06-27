@@ -2,6 +2,12 @@ const mongoose = require('mongoose');
 
 const Message= new mongoose.Schema({
 
+      SenderId:
+    {
+    type: mongoose.Schema.Types.ObjectId,
+    default: null,
+    required: true,
+  },
   text:{
     type:String,
     required: true,
@@ -28,6 +34,11 @@ const Message= new mongoose.Schema({
 });
 
 const chatbox= new mongoose.Schema({
+  name:
+{
+  type:String,
+  
+},
     ParticipantsId:
     {
     type: [mongoose.Schema.Types.ObjectId],
@@ -39,6 +50,15 @@ const chatbox= new mongoose.Schema({
         type: [Message.schema],
         required: true
     },
+   CreatedAt:{
+  type: Date,
+  default: Date.now,
+  required: true,
+  index: true
+
+   }
+  
+  
 
   
 });

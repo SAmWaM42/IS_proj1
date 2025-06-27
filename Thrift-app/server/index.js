@@ -26,7 +26,7 @@ app.use(session({
   saveUninitialized: false, // Don't create session until something stored
   cookie: {
       secure: false, // Set to true if using HTTPS (recommended in production)
-      maxAge: 1000 * 60 * 60 * 0.5 // 30 minutes	  
+      maxAge: 1000 * 60 * 60 * 2 // 2hrs 
   }
 }));
 

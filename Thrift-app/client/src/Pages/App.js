@@ -12,6 +12,7 @@ import Browse from './Browse.js';
 import IndividualProduct from './IndividualProduct.js';
 
 
+
 function App() {
     const [message, setMessage] = useState('');
     const nav_elements = [
@@ -48,10 +49,14 @@ function App() {
                     <Route path="/Login" element={<Login />} />
                     <Route path="/Register" element={<Register />} />
                     <Route path="/auth" element={<Auth />} />
-                    <Route path="/Dashboard" element={<Dashboard></Dashboard>} />
+                    <Route path="/Dashboard" element={<Dashboard></Dashboard>}/>
+                     <Route path="/Dashboard/AddProduct" element={<Dashboard></Dashboard>}/>
+                      <Route path="/Dashboard/Chats" element={<Dashboard></Dashboard>}/>
+                       <Route path="/Dashboard/Chatbox/:chatId" element={<Dashboard></Dashboard>}/>
+
                     <Route path="/Browse" element={<Browse></Browse>} />
                     <Route  path="/product/:id" element= {<IndividualProduct></IndividualProduct>} />
-                       <Route  path="/user/:userId" element= {<Dashboard></Dashboard>} />
+                    <Route  path="/user/:userId" element= {<Dashboard></Dashboard>} />
                     
 
 
