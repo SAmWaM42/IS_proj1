@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Product = require('../Schemas/ProductSchema'); // Import the Product model
 const User = require('../Schemas/UserSchema'); // Import the User model
+const Cart=require('../Schemas/CartSchema')
 const multer = require('multer'); // For handling file uploads
 const path= require('path'); // For handling file path
 const storage=multer.diskStorage({
@@ -16,6 +17,106 @@ const storage=multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // POST a new product
+
+// GET all products
+
+router.post('/add-to-cart',async (req,res)=>{
+  const {ProductID,name,price,quantity}=req.body;
+  try{
+    const productInDb = await Product.findById(ProductID);
+        if (!productInDb) {
+            return res.status(404).json({ message: 'Product not found.' });
+
+        }
+  const userId=req.session.user.id;
+  let myCart=await Cart.findOne({UserId:userId});
+  if(!myCart)
+  {
+    myCart=new Cart({
+      UserId:userId,
+      SessionId:req.session.id,
+      items:[]
+    });
+
+  }
+  const cartItemToAdd=
+  {
+       ProductID: productInDb._id,
+            name: productInDb.name,
+            price: productInDb.price,
+            quantity: quantity // Use the quantity provided by the user
+
+  };
+//check if item already exists in cart
+   const itemIndex = myCart.items.findIndex(
+            item => item.productId.toString() === productId
+        );
+      
+
+if(itemIndex>-1)
+{
+  myCart.items[itemIndex].quantity=quantity;
+
+  myCart.items[itemIndex].price=productInDb.price;
+  myCart.items[itemIndex].name=productInDb.name;
+  
+}
+else
+
+{
+  myCart.items.push(cartItemToAdd);
+}
+  
+await myCart.save();
+res.status(200).json({
+  message:'Product added successfully',
+  cart:myCart,
+
+});
+  }catch(err)
+  {
+    console.error('cart item not succesfully added',err);
+    res.status(500).json({messge:"server error adding items to cart",error:err});
+
+  }
+
+
+
+});
+router.get('/cart',async (req,res)=>{
+
+  const userId=req.session.user.id;
+  try{
+  let myCart= await Cart.findOne({UserId:userId});
+   if(!myCart)
+  {
+    myCart=new Cart({
+      UserId:userId,
+      SessionId:req.session.id,
+      items:[]
+    });
+
+  }
+  await myCart.save();
+
+  res.status(200).json({message:"cart data sent",cart:myCart});
+}
+catch(err)
+{
+  res.status(500).json({message:"error fetching cart",error:err });
+  console.error("Error fetching or creating cart:", err);
+
+}
+
+
+  
+
+
+});
+router.get('/', async (req, res) => {
+  const products = await Product.find();
+  res.json(products);
+});
 router.post('/',upload.single('image'), async (req, res) =>
   {
 
@@ -46,11 +147,6 @@ router.post('/',upload.single('image'), async (req, res) =>
   }
 });
 
-// GET all products
-router.get('/', async (req, res) => {
-  const products = await Product.find();
-  res.json(products);
-});
 router.get('/:id', async (req, res) => {
 
 const {id}=req.params;
@@ -62,3 +158,4 @@ const {id}=req.params;
 
 
 module.exports = router;
+

@@ -6,10 +6,11 @@ function IndividualProduct() {
     const { id } = useParams(); // Get the product ID from the URL
     const navigate = useNavigate();
     const [product, setProduct] = useState(null); // Renamed data to product for clarity
-    const [seller,setSeller]=useState(null);
+    const [seller, setSeller] = useState(null);
     const [loading, setLoading] = useState(true); // State to track loading status
-    const[loadingUser,setLoadingUser]=useState(true)
+    const [loadingUser, setLoadingUser] = useState(true)
     const [error, setError] = useState(null); // State to track any errors
+    const [itemData,setItemData]=useState({quantity:1});
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -32,37 +33,78 @@ function IndividualProduct() {
         };
 
         fetchProduct();
-    }, [id]);
-     // Dependency array: re-run if 'id' changes
-     useEffect(()=>
-     { const getsellername=async ()=>
-     {
-        try
-        {
-            const res=await fetch(`http://localhost:5000/user/${product.UserID}`);
-            
+    }, []);
+    // Dependency array: re-run if 'id' changes
+    useEffect(() => {
+        const getsellername = async () => {
+            try {
+                const res = await fetch(`http://localhost:5000/user/${product.UserID}`);
+
                 if (!res.ok) {
                     const errorData = await res.json();
                     throw new Error(errorData.message || 'Failed to Seller');
                 }
-            const seller=await res.json();
-            setSeller(seller); 
-            setLoadingUser(false);
-        }
-        catch(err)
-        {
+                const seller = await res.json();
+                setSeller(seller);
+                setLoadingUser(false);
+            }
+            catch (err) {
 
-       console.log(err);
+                console.log(err);
+            }
+        };
+        if (!loading && loadingUser) {
+            getsellername();
         }
-    };
-    if(!loading&&loadingUser)
-    {
-    getsellername();
     }
-     }
-    )
-
     
+    )
+         const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setItemData(prevValues => ({
+        ...prevValues,
+        [name]: value,
+    }))};
+    const addToCart=async (event)=>
+    {
+          event.preventDefault();
+
+          const cartItem=
+          {
+            name:product.name,
+            ProductID:product._id,
+            price:product.price,
+            quantity:itemData.quantity,
+          }
+          try{
+            const response=await fetch('http://localhost:5000/product/add-to-cart',{
+                method:'POST',
+                credentials:'include',
+                headers:{
+                     'Content-Type': 'application/json'
+                },
+                body:JSON.stringify(cartItem)
+            })
+        if(!response.ok)
+        {
+            throw new Error("error adding product to cart");
+        }
+        else
+        {
+            console.log("item succesfully added to cart");
+        }
+         
+
+          }
+          catch(err)
+          {
+          console.error("cart addition error:",err.message);
+          }   
+
+
+    }
+
+
 
     if (!product) { // If product is null after loading (e.g., product not found)
         return <div className="individual-product">Product not found.</div>;
@@ -87,25 +129,28 @@ function IndividualProduct() {
                 <div className="product-seller-info">
                     {/* Assuming seller is nested in your product data */}
                     <p>Sold by:
-                      { !loadingUser?(
+                        {!loadingUser ? (
                             <span className="seller-name-link">
-                                  <Link to={`/user/${product.UserID}`}>{seller.name}</Link>
+                                <Link to={`/user/${product.UserID}`}>{seller.name}</Link>
                             </span>)
-:(
-   <p>Loading user </p>
-)
+                            : (
+                                <p>Loading user </p>
+                            )
 
 
-                      }
+                        }
                     </p>
-                    
-                   
+
+
                 </div>
 
                 {/* Add other buttons/features here, e.g., Add to Cart, Buy Now */}
                 <div className="product-actions">
-                    <button className="add-to-cart-button">Add to Cart</button>
-                    <button className="buy-now-button">Buy Now</button>
+                    <form onSubmit={addToCart} >
+                        <input type='number' name='quantity'  value={itemData.quantity} onChange={handleInputChange}></input>
+                        <button className="add-to-cart-button" type='submit'>Add to Cart</button>
+                    </form>
+
                 </div>
             </div>
         </div>

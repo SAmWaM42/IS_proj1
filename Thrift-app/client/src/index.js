@@ -4,16 +4,20 @@ import ReactDOM from 'react-dom/client';
 import App from './Pages/App.js';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { useContext } from 'react';
+import { GlobalContext, ContextProvider } from './Components/ContextWrapper.js';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render
-(
-  
-    <Router>
-      <App />
-    </Router>
- 
-);
+  (
+    <ContextProvider>
+      <Router>
+
+        <App />
+
+      </Router>
+    </ContextProvider >
+  );
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
