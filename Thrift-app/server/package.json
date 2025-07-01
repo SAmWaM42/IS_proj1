@@ -19,7 +19,10 @@
     "express-session": "^1.18.1",
     "mongoose": "^8.15.1",
     "multer": "^2.0.1",
-    "nodemailer": "^7.0.3"
+    "natural": "^8.1.0",
+    "nodemailer": "^7.0.3",
+    "stopword": "^3.1.5",
+    "synonyms": "^1.0.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Browse.css';
 import Card from '../Components/Card';
@@ -8,10 +8,12 @@ function Browse() {
     const url = `http://localhost:5000/product`;
     const sessionUrl = `http://localhost:5000/user/me`
     const navigate = useNavigate();
+   
     const [products, setProducts] = useState([]);
     const [sessionData, setSessionData] = useState(null);
     const [LoadingSession, setLoadingSession] = useState(true);
     const [LoadingProducts, setLoadingProducts] = useState(true);
+    const [searchValues,setSearchValues]=useState(null)
 
     useEffect(() => {
         try {
@@ -64,15 +66,62 @@ function Browse() {
             navigate('/Login'); // Redirect to login if session is not active
         }
     }, [sessionData, navigate]);
+    
+        const Search=async (e)=>
+        {
+            e.preventDefault()
+            try{
+                let urlS;
+                if(!searchValues || !searchValues.search || searchValues.search.trim() === '')
+                {
+                  urlS=url;
+                }else
+                {
+                  urlS=`http://localhost:5000/product/search/${searchValues.search}`;
+                }
+            const response= await fetch(urlS,{credentials:'include'});
+            if(!response.ok)
+            {
+                 throw new Error("error getting data");
 
+            }
+            const result= await response.json();
+          
+            setProducts(result);
+            
 
+            }
+            catch(err)
+            {
+                console.log(err.message);
+               
+            }
+            
+           
+
+        }
+    
+
+  const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setSearchValues(prevValues => ({
+            ...prevValues,
+            [name]: value,
+        }))
+    };
 
     return (
 
         <div className="browse-container">
             <h1>Browse Products</h1>
             {
+               
                 (products.length) ? (
+                    <div>
+                        <form onSubmit={Search} >
+                            <input type='text' name='search' onChange={handleInputChange}></input>
+                            <button  type='submit'>Search</button>
+                        </form>
                     <div className="product-list">
                         {
 
@@ -80,6 +129,7 @@ function Browse() {
                                 <Card data={data} />
                             )
                         }
+                    </div>
 
 
                     </div>
