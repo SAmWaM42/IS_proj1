@@ -1,7 +1,6 @@
-import { Navigate, NavigationType } from "react-router-dom";
-import Button from "./Button";
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material'; // Or wherever your Button component is from
 
 
 function Form({ formData, button_data, dest_url }) {
@@ -47,7 +46,7 @@ function Form({ formData, button_data, dest_url }) {
                 credentials: 'include', // Include cookies for session management
             });
 
-            const data = await response.json(); // Parse the server's JSON response
+      const data = await response.json();
 
             if (response.ok) {
                 console.log('Server response (success):', data);
