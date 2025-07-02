@@ -1,14 +1,24 @@
+<<<<<<< Updated upstream
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
   background-color: #f8f5ee; /* Soft cream */
   color: #3d3d3d;
+=======
+/* Login.css */
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f9f6fb;
+>>>>>>> Stashed changes
 }
 
 .login-page {
   display: flex;
   justify-content: center;
   align-items: center;
+<<<<<<< Updated upstream
   height: 100vh;
 }
 
@@ -85,4 +95,31 @@ button.secondary {
 
 button.secondary:hover {
   background-color: #f2c5bb;
+=======
+  min-height: 100vh;
+  background: linear-gradient(135deg, #e0bce0, #ffffff);
+}
+
+.login-form-wrapper {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 20px rgba(180, 128, 214, 0.2);
+}
+
+/* Button class used in Login.jsx */
+.login-button {
+  background-color: #b480d6;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+  background-color: #4c2a85;
+>>>>>>> Stashed changes
 }
