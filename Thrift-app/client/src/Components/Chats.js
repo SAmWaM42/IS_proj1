@@ -38,8 +38,8 @@ function Chats() {
                 <ul>
                     {
                         chats.map((chat) => (
-                            <li key={chat._id} onClick={() => handleChatClick(chat._id)}>
-                                <div className="chat-item">
+                            <li key={chat._id} onClick={() => handleChatClick(chat._id)} >
+                                <div className="chat-item" >
                                     <h3>{chat.name}</h3>
 
                                 </div>

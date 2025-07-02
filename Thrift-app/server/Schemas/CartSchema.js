@@ -14,7 +14,7 @@ const Cart= new mongoose.Schema({
   },
   items:
   {
-    type:[CartItem.schema],
+    type:[CartItem],
 
   }
 

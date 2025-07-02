@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect ,useContext} from 'react';
 import './App.css';
 import { Link } from 'react-router-dom';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
@@ -10,11 +10,16 @@ import Auth from './auth.js';
 import Dashboard from './Dashboard.js';
 import Browse from './Browse.js';
 import IndividualProduct from './IndividualProduct.js';
+import Cart from '../Components/Cart.js';
+import { GlobalContext } from '../Components/ContextWrapper.js';
 
 
 
 function App() {
+    const contextData=useContext(GlobalContext);
     const [message, setMessage] = useState('');
+    const{cartVisible}=contextData;
+
     const nav_elements = [
         //modify this to add more elements to the navbar
         { key: 'home', Label: 'Home', destination: '/' },
@@ -43,6 +48,13 @@ function App() {
 
 
             <Navbar link_data={nav_elements} />
+            {
+                cartVisible&&
+                (
+                    <Cart></Cart>
+                )
+
+            }
       
                 <Routes>
                     <Route path="/" element={<Home />} />

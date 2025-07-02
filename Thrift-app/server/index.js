@@ -46,8 +46,6 @@ const User = require('./Schemas/UserSchema');
 const Product = require('./Schemas/ProductSchema');
  
 
-
-
 app.use('/user', userroutes);
 app.use('/product', productRoutes);
 app.use('/images', express.static(path.join(__dirname, 'images'))); // Serve static images from the Images directory	
