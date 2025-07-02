@@ -1,9 +1,9 @@
 button {
-  background-color: #ffd600;
-  color: #1a1a1a;
+  background-color: #cb7b50; /* Coral orange */
+  color: #ffffff; /* White text */
   padding: 0.75rem 1.5rem;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   font-weight: bold;
   font-size: 1rem;
   cursor: pointer;
@@ -11,11 +11,13 @@ button {
 }
 
 button:hover {
-  background-color: #e6c200;
+  background-color: #f6d7ce; /* Pale orange */
+  color: #ed834a; /* Text shifts to coral for contrast */
   transform: scale(1.03);
 }
 
 button:active {
-  background-color: #c7a500;
+  background-color: #cb7b50; /* Deeper coral */
+  color: #ffffff;
   transform: scale(0.97);
 }

@@ -1,4 +1,6 @@
 
+import { useNavigate } from 'react-router-dom';//added
+
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
@@ -8,12 +10,9 @@ import './Login.css';
 
 function Login()
 {
-    const button_data=
-    { className: 'login-button',
-      type: 'submit',
-      label: 'Login',
-   
-    }
+    const navigate = useNavigate();
+
+  
     const formdata = [
        
         { label: 'Email', type: 'email', name: 'email', key: 'email' },
@@ -25,11 +24,39 @@ function Login()
 
 
 
-    return(
+    return (
+  <div className="login-page">
+    <div className="login-card">
+      <img src="\waridilogo (2).png" alt="Waridi Logo" className="logo" />
+      <h2 className="title">Welcome to Waridi</h2>
+<Form formData={formdata} dest_url={dest_url} />
 
-        <Form formData={formdata} button_data={button_data} dest_url={dest_url}></Form>
-    );
 
+
+ 
+     {/*added*/}
+    <div className="button-group">
+       <button
+         type="submit"
+         form="login-form"        // replace with your Form's form id, or wrap Form in <form id="login-form">
+        className="login-button"
+       >
+         Sign In
+      </button>
+
+       <button
+         type="button"
+        className="signup-button secondary"
+       onClick={() => navigate('/register')}
+     >       Sign Up
+      </button>
+    </div>
+
+
+ {/*end of addition*/}
+    </div>
+  </div>
+);
 
     
    
