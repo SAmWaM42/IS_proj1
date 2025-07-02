@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@mui/material'; // Or wherever your Button component is from
+import Button from './Button';
 
 
 function Form({ formData, button_data, dest_url }) {
@@ -114,8 +114,7 @@ function Form({ formData, button_data, dest_url }) {
 
                 ))}
             <Button
-                className={button_data.className}
-                type={button_data.type} label={button_data.label}
+            
             />
         </form>
 

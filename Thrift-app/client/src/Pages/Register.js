@@ -1,7 +1,7 @@
 import Button from "../Components/Button";
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-
+import { useNavigate } from "react-router-dom";
 import Form  from "../Components/Form";
 import './Register.css';
 
@@ -21,7 +21,11 @@ function Register() {
   ];
 
   const dest_url = "user/register"; // This should be the endpoint for registration
-
+  
+  const redirect=()=>
+  {
+    navigate('/login');
+  };
   return (
     <div className="register-page">
       <div className="register-card">
@@ -43,7 +47,7 @@ function Register() {
        <button
          type="button"
          className="login-button secondary"
-         onClick={() => navigate('/login')}
+         onClick={redirect}
        >
          Sign In
        </button>

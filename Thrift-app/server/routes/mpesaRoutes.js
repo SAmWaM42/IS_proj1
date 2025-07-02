@@ -22,20 +22,34 @@ async function getDarajaAccessToken() {
     const auth = Buffer.from(`${CONSUMER_KEY}:${CONSUMER_SECRET}`).toString('base64');
     const tokenUrl = "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials";
 
+ 
     try {
-        const response = await fetch(tokenUrl, {
+        const response = await fetch(tokenUrl, { // Use fetch here
             headers: {
                 'Authorization': `Basic ${auth}`
             }
         });
-        const accessToken = response.data.access_token;
+
+      
+        const data = await response.json(); 
+  
+        if (!response.ok) {
+       
+            console.error("Daraja API Error Response:", data);
+            throw new Error(`Daraja API responded with status ${response.status}: ${data.errorMessage || JSON.stringify(data)}`);
+        }
+
+        const accessToken = data.access_token; // Now access access_token from 'data'
         console.log("Daraja Access Token:", accessToken);
         return accessToken;
+
     } catch (error) {
-        console.error("Error getting Daraja Access Token:", error.response ? error.response.data : error.message);
-        throw new Error("Failed to get Daraja Access Token.");
+        console.error("\n--- DEBUGGING: Error getting Daraja Access Token ---");
+        console.error("Full Error Object:", error); // This will show you everything
     }
 }
+      
+
 router.get('/get-token',async (req,res)=>{
       try {
         const token = await getDarajaAccessToken();
@@ -50,7 +64,14 @@ router.get('/',async (req,res)=>{
 
     res.status(200).json({message:"hitting this route"})
 });
+async function initiateB2CPayment()
+{
 
+}
+async function initiateC2BPayment()
+{
+    
+}
 
 
 
