@@ -1,14 +1,7 @@
-<<<<<<< Updated upstream
-import React from 'react';
-import './Home.css';
-import { useNavigate } from 'react-router-dom';
-=======
 import react from "react";
 import './Home.css';
 import React, { useState, useEffect } from 'react';
-function Home()
-{
->>>>>>> Stashed changes
+
 
 function Home() {
   const navigate = useNavigate();

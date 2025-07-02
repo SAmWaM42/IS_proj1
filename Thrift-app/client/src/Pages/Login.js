@@ -1,10 +1,4 @@
-<<<<<<< Updated upstream
-
-import { useNavigate } from 'react-router-dom';//added
-
-=======
 import Button from "../Components/Button";
->>>>>>> Stashed changes
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 

@@ -1,8 +1,4 @@
-<<<<<<< Updated upstream
-
-=======
 import Button from "../Components/Button";
->>>>>>> Stashed changes
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
@@ -41,9 +37,5 @@ function  Auth()
 
 }
 export default Auth;
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
 
 // This file is for the authentication page, which can be used for both login and registration.

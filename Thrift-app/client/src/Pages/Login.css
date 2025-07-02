@@ -1,101 +1,15 @@
-<<<<<<< Updated upstream
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #f8f5ee; /* Soft cream */
-  color: #3d3d3d;
-=======
 /* Login.css */
 
 body {
   margin: 0;
   padding: 0;
   background-color: #f9f6fb;
->>>>>>> Stashed changes
 }
 
 .login-page {
   display: flex;
   justify-content: center;
   align-items: center;
-<<<<<<< Updated upstream
-  height: 100vh;
-}
-
-.login-card {
-  background-color: #ffffff;
-  padding: 40px;
-  border-radius: 15px;
-  box-shadow: 0 0 10px rgba(204, 77, 60, 0.15);
-  width: 350px;
-  text-align: center;
-  border: 1px solid #e6e3db;
-}
-
-.logo {
-  height: 100px;
-  margin-bottom: 3px;
-}
-
-.title {
-  color: #cc4d3c;
-  margin-bottom: 20px;
-}
-
-input[type="email"],
-input[type="password"] {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 15px;
-  border: 1px solid #e6e3db;
-  border-radius: 5px;
-  background-color: #fdfcf9;
-  color: #3d3d3d;
-}
-
-.login-button {
-  width: 100%;
-  padding: 12px;
-  background-color: #cc4d3c;
-  color: #ffffff;
-  border: none;
-  border-radius: 5px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.login-button:hover {
-  background-color: #a03a2e;
-}
-
-label {
-  color: #e66d50; /* Pale orange instead of yellow */
-  font-weight: bold;
-  display: block;
-  margin-bottom: 6px;
-  text-align: left;
-}
-.button-group {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.login-button,
-.register-button {
-  flex: 1;
-}
-
-button.secondary {
-  background-color: #f6d7ce;
-  color: #cc4d3c;
-  border: 1px solid #cc4d3c;
-}
-
-button.secondary:hover {
-  background-color: #f2c5bb;
-=======
   min-height: 100vh;
   background: linear-gradient(135deg, #e0bce0, #ffffff);
 }
@@ -121,5 +35,4 @@ button.secondary:hover {
 
 .login-button:hover {
   background-color: #4c2a85;
->>>>>>> Stashed changes
 }
