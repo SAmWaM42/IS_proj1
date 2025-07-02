@@ -168,7 +168,7 @@ router.get('/search/:search', async (req, res) => {
    {
     if(product.search_terms&&Array.isArray(product.search_terms))
     {
-      const commonTerms=await getIntersect(product.search_terms,searchParameters);
+      const commonTerms=await   getIntersect(product.search_terms,searchParameters);
       const score=commonTerms.length;
       if(score>0)
       {

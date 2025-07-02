@@ -25,6 +25,18 @@ const User= new mongoose.Schema({
     enum: ['buyer','seller','admin'],
     default: 'buyer'
 
+  },
+  phoneNumber:
+  {type:String,
+ required:false
+
+  },
+  Location:
+  {
+    type:String,
+    required:false
+
+
   }
 ,
   createdAt: {

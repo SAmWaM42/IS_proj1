@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const session=require('express-session');
 const cookieParser = require('cookie-parser');
@@ -7,8 +8,10 @@ const port = 5000;
 const mongoose = require('mongoose');
 const userroutes = require('./routes/userRoutes');
 const productRoutes = require('./routes/productRoutes');
+const mpesaRoutes=require('./routes/mpesaRoutes')
 const multer = require('multer')
 const path= require('path');
+const ngrok = require('@ngrok/ngrok');
 
 
 //temp cart list to store items added to cart
@@ -37,18 +40,18 @@ mongoose.connect(uri)
     .catch(err => console.error('MongoDB connection error:', err));
 
 
-
-
-
-
+app.use('/user', userroutes);
+app.use('/product', productRoutes);
+app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/mpesa',mpesaRoutes);
 
 const User = require('./Schemas/UserSchema'); 
 const Product = require('./Schemas/ProductSchema');
+
  
 
-app.use('/user', userroutes);
-app.use('/product', productRoutes);
-app.use('/images', express.static(path.join(__dirname, 'images'))); // Serve static images from the Images directory	
+
+// Serve static images from the Images directory	
 
 app.get('/', (req, res) => {
     res.json({ message: 'Hello the homepage is working and so is the router!' });
@@ -81,7 +84,20 @@ app.use((err, req, res, next) => {
 });
 
 
-app.listen(port, () => {
+app.listen(port,async () => {
     console.log(`Server is running on http://localhost:${port}`);
+       try {
+        const listener = await ngrok.forward({ addr: port, authtoken_from_env: true });
+        const publicUrl = listener.url();
+        console.log(`Ngrok Ingress established at: ${publicUrl}`);
+
+        // Store or use this publicUrl for your Daraja callbacks
+        // For example: process.env.NGROK_PUBLIC_URL = publicUrl;
+        // Or you can pass it to a function that needs to configure Mpesa calls
+
+    } catch (error) {
+        console.error('Error starting ngrok tunnel:', error);
+        process.exit(1);
+    }
 });
 
