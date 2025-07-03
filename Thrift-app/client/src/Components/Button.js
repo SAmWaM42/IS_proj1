@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './Button.css';
-function Button(data) 
-{
-    const url= `http://localhost:5000/${data.type}`;
-    const [message, setMessage] = useState('');
-    useEffect(() => {
-            fetch(url).then(response => response.json()).then(data => setMessage(data.message));
-         }, []);
 
-         return(
-            <button className={data.type}>
-              {message}
-            </button>
-         )
+function Button({ className, type, label, onClick, form }) {
+  return (
+    <button
+      className={className}
+      type={type}
+      onClick={onClick}
+      form={form}
+    >
+      {label}
+    </button>
+  );
 }
 
 export default Button;
+
