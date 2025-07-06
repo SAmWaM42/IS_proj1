@@ -3,6 +3,7 @@ const router = express.Router();
 const Product = require('../Schemas/ProductSchema'); // Import the Product model
 const User = require('../Schemas/UserSchema'); // Import the User model
 const Cart = require('../Schemas/CartSchema')
+const Order=require('../Schemas/OrderSchema');
 const multer = require('multer'); // For handling file uploads
 const path = require('path');
 //includes to mimic A.I. search integration
@@ -227,10 +228,68 @@ router.get('/cart', async (req, res) => {
   }
 
 
-
-
-
 });
+router.get('/get-Products', async (req, res) => {
+  const products = await Product.find({UserID:req.session.user.id});
+  res.json(products);
+});
+
+router.get('/get-Orders', async (req, res) => {
+  try
+  {
+    const {filter}=req.params
+    const orders = await Order.find({sellerId:req.session.user.id});   
+   if(!orders)
+   {
+         req.status(200).json({message:"no Orders in history"})
+   }
+   const buyer=User.findById(orders.UserID);
+   if(!buyer)
+   {
+      throw new Error("order is of Invalid format")
+    }
+
+    const data=
+    {
+      _id:orders._id,
+      name:buyer.name,
+      UserID:orders.UserID,
+      transactionID:orders.transactionID,
+      status:orders.status,
+      items:orders.status,
+      completionDate:orders.completionDate||''
+    }
+
+    res.status(200).json(data)
+
+  }
+  catch(err)
+  {
+         res.status(500).json({message:"error fetching orders",error:err})
+  }
+});
+router.get('/remove-Product/:id', async (req, res) => {
+  const {id}=req.params;
+  try{
+  const products = await Product.findById(id);
+  if(!products)
+  {
+    return res.status(401).json({message:'This product is currently inavailable'})
+  }
+  const response=await Product.findOneAndDelete({_id:id})
+  if(!response.ok)
+  {
+    throw new Error("Product removal not successful")
+
+  }
+
+   res.status(200).json({message:"Product removed successfully"});
+}catch(err)
+{
+   return res.status(500).json({message:'Error removing product', error:err})
+}
+});
+
 router.get('/', async (req, res) => {
   const products = await Product.find();
   res.json(products);

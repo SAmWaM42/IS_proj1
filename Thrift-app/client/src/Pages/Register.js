@@ -38,7 +38,7 @@ function Register() {
       <div className="register-card">
         <img src="\waridilogo (2).png" alt="Waridi Logo" className="logo" />
         <h2 className="title">Create Your Waridi Account</h2>
-        <Form formData={formdata} button_data={button_data} dest_url={dest_url} />
+        <Form formData={formdata} button_data={button_data} dest_url={dest_url} id='register-form'/>
 
     {/*addition*/}
 

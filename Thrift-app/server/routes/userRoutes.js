@@ -52,7 +52,7 @@ async function sendOTPEmail(email, code) {
 };
 // REGISTER
 router.post('/register', upload.none(), async (req, res) => {
-  const { name, email ,phoneNumber,role } = req.body;
+  const { name, email, phoneNumber, role } = req.body;
   console.log(req.body);
   try {
     const existingUser = await User.findOne({ email });
@@ -60,7 +60,7 @@ router.post('/register', upload.none(), async (req, res) => {
     const currentDate = new Date();
     const da = currentDate.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
     const code = Math.floor(100000 + Math.random() * 900000); // Generate a 6-digit code
-    const user = new User({ name: name, email: email ,phoneNumber:phoneNumber ,role:role}); // Default role can be set to 'buyer' or any other role as needed
+    const user = new User({ name: name, email: email, phoneNumber: phoneNumber, role: role }); // Default role can be set to 'buyer' or any other role as needed
     const otp = new OTP({ userId: user._id, code: code });
     await user.save();
     await otp.save();
@@ -98,11 +98,83 @@ router.post('/2FA', upload.none(), async (req, res) => {
     }
     req.session.user = { id: updatedUser._id, name: updatedUser.name };
     await OTP.deleteOne({ _id: otp._id }); // Delete the OTP after successful confirmation
-    res.status(201).json({ message: 'User registered', userId: updatedUser._id });
+    res.status(201).json({ message: 'User registered', myData:updatedUser,redirect:'/Dashboard'});
   } catch (err) {
     res.status(500).json({ message: 'Registration/Confirmation error', error: err.message });
   }
 });
+//update route
+router.post('/update', async (req, res) => {
+  const { name, email, _id, oldPassword, newPassword, phoneNumber, role } = req.body;
+  console.log(req.body);
+  try {
+    const me = await User.findById(_id);
+    if (!me) return res.status(400).json({ message: 'no user with the above ID exists' });
+     const updates = {};
+
+       if (oldPassword && newPassword) {
+         if (newPassword.trim() === '') {
+                return res.status(400).json({ message: 'New password cannot be empty.' });
+            }
+          
+    const match = bcrypt.compare(oldPassword, me.passwordHash);
+    if (!match) {
+      return res.status(401).json({ message: 'oldPassword not correct' });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+     updates.passwordHash = hashedPassword;
+
+    }else if (oldPassword || newPassword) {
+            // If only one password field is provided, it's an error
+            return res.status(400).json({ message: 'Both old and new password are required to change password.' });
+        }
+    const fieldsToUpdate = ['name', 'email', 'phoneNumber', 'role'];
+     fieldsToUpdate.forEach(field => {
+           if (req.body[field] !== undefined && req.body[field] !== null && req.body[field].toString().trim() !== '') {
+             if (req.body[field] !== user[field]) { // Only update if different from current value
+                    updates[field] = req.body[field];
+                }
+            }
+        });
+         if (updates.role && !['buyer', 'seller'].includes(updates.role)) {
+            return res.status(400).json({ message: 'Invalid role provided.' });
+        }
+
+          if (Object.keys(updates).length === 0) {
+            return res.status(200).json({ message: 'No changes provided to update.' }); // Indicate no update needed
+        }
+    const updatedUser = await User.findByIdAndUpdate(
+      _id,
+      {
+        passwordHash: hashedPassword,
+        name: name,
+        phoneNumber: phoneNumber,
+        email: email,
+        role: role
+      },
+      { new: true, runValidators: true } // 'new: true' returns the updated document, 'runValidators: true' runs schema validations
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'Update failed' });
+    }
+     res.status(200).json({
+            message: 'Profile updated successfully!', // Correct success message
+            user: { // Send back relevant updated user data (avoid sending passwordHash)
+                id: updatedUser._id,
+                name: updatedUser.name,
+                email: updatedUser.email,
+                phoneNumber: updatedUser.phoneNumber,
+                role: updatedUser.role
+            }
+        });
+   
+  } catch (err) {
+    res.status(500).json({ message: 'Update error', error: err.message });
+  }
+});
+
 
 
 
@@ -118,7 +190,7 @@ router.post('/login', upload.none(), async (req, res) => {
     if (!match) return res.status(401).json({ message: 'Invalid credentials' });
 
     req.session.user = { id: user._id, name: user.name };
-    res.status(200).json({ message: 'Login successful', userId: user._id });
+    res.status(200).json({ message: 'Login successful',myData:user,redirect:'/Dashboard' });
   } catch (err) {
     res.status(500).json({ message: 'Login error', error: err.message });
   }
@@ -155,35 +227,32 @@ router.get('/test', (req, res) => {
   res.json({ message: 'User routes are working!' });
 });
 
-router.post('/chats' ,async (req, res) => 
-{
-  try{
-  const me=req.session.user.id;
-  const {otherUser}=req.body;
-   if (!otherUser || !mongoose.Types.ObjectId.isValid(otherUser)) {
-            return res.status(400).json({ message: 'Invalid or missing otherUserId' });
-        }
+router.post('/chats', async (req, res) => {
+  try {
+    const me = req.session.user.id;
+    const { otherUser } = req.body;
+    if (!otherUser || !mongoose.Types.ObjectId.isValid(otherUser)) {
+      return res.status(400).json({ message: 'Invalid or missing otherUserId' });
+    }
     let Chatbox = await chatbox.findOne({
-            ParticipantsId: { $all: [me, otherUser], $size: 2 }
-        });
-        if(Chatbox)
-        {
-             return res.status(200).json({ chatId:  Chatbox._id.toString(), message: 'Existing chat found' });
-        }
+      ParticipantsId: { $all: [me, otherUser], $size: 2 }
+    });
+    if (Chatbox) {
+      return res.status(200).json({ chatId: Chatbox._id.toString(), message: 'Existing chat found' });
+    }
 
-        Chatbox=new chatbox
-        ({
-          ParticipantsId:[me,otherUser],
-          messages:[]
-        });
-        await Chatbox.save();
-         res.status(201).json({ chatId: Chatbox._id.toString(), message: 'New chat created' });
-      }catch(err)
-      {
-         console.error('Error creating or getting chatbox:', err);
-        res.status(500).json({ message: 'Server error creating or getting chatbox', error: err.message });
+    Chatbox = new chatbox
+      ({
+        ParticipantsId: [me, otherUser],
+        messages: []
+      });
+    await Chatbox.save();
+    res.status(201).json({ chatId: Chatbox._id.toString(), message: 'New chat created' });
+  } catch (err) {
+    console.error('Error creating or getting chatbox:', err);
+    res.status(500).json({ message: 'Server error creating or getting chatbox', error: err.message });
 
-      }
+  }
 
 
 
@@ -205,8 +274,8 @@ router.get('/chats', async (req, res) => {
       }));
       let chatName = 'GroupChat';
       const otherParticipant = participants.find(p => p._id !== req.session.user.id.toString());
-      
-      
+
+
       if (participants.length === 2) {
         chatName = otherParticipant.name;
       }
@@ -214,8 +283,8 @@ router.get('/chats', async (req, res) => {
         chatName = "Group Chat";
       }
 
-   
-      
+
+
 
       return {
         _id: chat._id.toString(), // The chatbox ID
@@ -230,31 +299,29 @@ router.get('/chats', async (req, res) => {
         // Add any other fields from your chatbox model that the frontend needs
       };
     });
-res.status(200).json(structuredChats);
+    res.status(200).json(structuredChats);
 
   } catch (err) {
-  console.error("Error in /chats GET endpoint:", err); // Log the basic error object
-        console.error("Full Stack Trace:", err.stack);     // <--- THIS IS WHAT WE NEED!
-        // --- END CRITICAL CHANGE ---
+    console.error("Error in /chats GET endpoint:", err); // Log the basic error object
+    console.error("Full Stack Trace:", err.stack);     // <--- THIS IS WHAT WE NEED!
+    // --- END CRITICAL CHANGE ---
 
-        res.status(500).json({ message: 'Error fetching user', error: err.message });
-   
+    res.status(500).json({ message: 'Error fetching user', error: err.message });
+
   }
 });
-router.get('/chats/:chatId' ,async (req, res) => 
-{
-  const {chatId}=req.params;
-  try{
-  
+router.get('/chats/:chatId', async (req, res) => {
+  const { chatId } = req.params;
+  try {
+
     let Chatbox = await chatbox.findById(chatId);
-       return res.status(200).json(Chatbox);
+    return res.status(200).json(Chatbox);
 
-      }catch(err)
-      {
-         console.error('Error creating or getting chatbox:', err);
-        res.status(500).json({ message: 'Server error creating or getting chatbox', error: err.message });
+  } catch (err) {
+    console.error('Error creating or getting chatbox:', err);
+    res.status(500).json({ message: 'Server error creating or getting chatbox', error: err.message });
 
-      }
+  }
 
 });
 
@@ -273,7 +340,7 @@ router.post('/chats/:chatId', async (req, res) => {
 
     const newMessage = {
       text,
-      SenderId:new mongoose.Types.ObjectId(req.session.user.id),
+      SenderId: new mongoose.Types.ObjectId(req.session.user.id),
       isRead: false,
       isDelivered: false,
       timestamp: new Date()

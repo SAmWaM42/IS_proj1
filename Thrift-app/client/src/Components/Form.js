@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from './Button';
+import { GlobalContext } from './ContextWrapper.js';
+ 
 
+function Form({ formData, id, dest_url }) {
+const contextData=useContext(GlobalContext);
 
-function Form({ formData, button_data, dest_url }) {
-
+const{myData,loggedIn,handleUpdate}=contextData;
 
     const navigate = useNavigate();
     const [formValues, setFormValues] = useState(() => {
@@ -52,7 +55,10 @@ function Form({ formData, button_data, dest_url }) {
             if (response.ok) {
                 console.log('Server response (success):', data);
                 if (data.redirect) {
-
+                       if(data.redirect==="/Dashboard")
+                       {
+                        handleUpdate({myData:data.myData,loggedIn:true})
+                       }
                     navigate(data.redirect);
                    
                 }
@@ -90,7 +96,7 @@ function Form({ formData, button_data, dest_url }) {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="form-container">
+        <form onSubmit={handleSubmit} id={id} className="form-container">
             {
                 formData.map((field) => (
 
@@ -135,7 +141,7 @@ function Form({ formData, button_data, dest_url }) {
                       
 
                 ))}
-            <Button />
+         
         </form>
 
     )
