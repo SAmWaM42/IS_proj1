@@ -13,8 +13,8 @@ function Login()
   
     const formdata = [
        
-        { label: 'Email', type: 'email', name: 'email', key: 'email' },
-        { label: 'Password', type: 'password', name: 'password', key: 'password' },
+        { label: 'email', type: 'email', name: 'email', key: 'email' },
+        { label: 'password', type: 'password', name: 'password', key: 'password' },
        
     ];
      

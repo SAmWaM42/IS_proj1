@@ -15,10 +15,10 @@ function Register() {
   };
 
   const formdata = [
-    { label: 'Name', type: 'text', name: 'name', key: 'username' },
-    { label: 'Email', type: 'email', name: 'email', key: 'email' },
-    { label: 'phoneNumber', type: 'text', name: 'phoneNumber', key: 'phoneNumber' },
-    { label: 'Select Your Role', type: 'select', name: 'role', key: 'role',value:'buyer',options:[
+    { label: 'name', type: 'text', name: 'name', key: 'username' },
+    { label: 'email', type: 'email', name: 'email', key: 'email' },
+    { label: 'phone number', type: 'text', name: 'phonenumber', key: 'phonenumber' },
+    { label: 'select your role', type: 'select', name: 'role', key: 'role',value:'buyer',options:[
        {value:'buyer'},
        {value:'seller'}
     ]
