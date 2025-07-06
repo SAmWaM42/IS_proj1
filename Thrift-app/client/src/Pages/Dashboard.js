@@ -9,7 +9,8 @@ import Chats from '../Components/Chats';
 import ChatboxPage from './chatboxpage';
 import Profile from './Profile.js';
 import ViewProducts from './ViewProducts.js';
-import ViewOrders from './ViewOrders';
+import ViewOrders from './ViewOrders.js';
+import UserOrders from './userOrders.js'
 import { GlobalContext } from '../Components/ContextWrapper.js';
 
 
@@ -34,11 +35,12 @@ function Dashboard() {
     const [isCreatingChat, setIsCreatingChat] = useState(null);
     const navigate = useNavigate();
 
-
-
-    if (!loggedIn) {
+  
+      useEffect(()=>{
+    if (loggedIn===false) {
+        
         navigate('/Login');
-    }
+    }},[])
 
     var isMyProfile = loadedMe && me && (me._id.toString() === userId || !userId);
     useEffect(() => {
@@ -169,7 +171,8 @@ function Dashboard() {
     if (myData.role === "buyer") {
         dash_nav_elements = [
             { key: 'Chats', Label: 'Chats', destination: '/Dashboard/Chats' },
-            { key: 'Profile', Label: 'Profile', destination: '/Dashboard/Profile' }
+            { key: 'Profile', Label: 'Profile', destination: '/Dashboard/Profile' },
+            { key: 'myOrders', Label: 'myOrders', destination: '/Dashboard/userOrders' }
 
         ]
     }
@@ -227,6 +230,10 @@ function Dashboard() {
                 return (
                     <ViewOrders></ViewOrders>
                 );
+                 case 'userOrders':
+                    return(
+                   <UserOrders></UserOrders>
+                    );
 
 
 

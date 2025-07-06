@@ -237,36 +237,105 @@ router.get('/get-Products', async (req, res) => {
 router.get('/get-Orders', async (req, res) => {
   try
   {
-    const {filter}=req.params
-    const orders = await Order.find({sellerId:req.session.user.id});   
-   if(!orders)
+  
+    const allOrders = await Order.find({sellerId:req.session.user.id});   
+   if(!allOrders)
    {
          req.status(200).json({message:"no Orders in history"})
    }
-   const buyer=User.findById(orders.UserID);
+    const finalData=[];
+ for(const orders of allOrders)
+ {
+   const buyer=await User.findById(orders.UserId);
    if(!buyer)
    {
       throw new Error("order is of Invalid format")
     }
-
-    const data=
+   
+ 
+    let data=
     {
       _id:orders._id,
       name:buyer.name,
-      UserID:orders.UserID,
+      UserID:orders.UserId,
       transactionID:orders.transactionID,
       status:orders.status,
-      items:orders.status,
+      items:orders.items,
       completionDate:orders.completionDate||''
     }
-
-    res.status(200).json(data)
+    console.log(data);
+    finalData.push(data);
+  }
+    res.status(200).json(finalData)
 
   }
   catch(err)
   {
+    console.log(err);
          res.status(500).json({message:"error fetching orders",error:err})
   }
+});
+router.get('/get-user-Orders', async (req, res) => {
+  try
+  {
+  
+    const allOrders = await Order.find({UserId:req.session.user.id});   
+   if(!allOrders)
+   {
+         req.status(200).json({message:"no Orders in history"})
+   }
+    const finalData=[];
+ for(const orders of allOrders)
+ {
+   const seller=await User.findById(orders.sellerId);
+   if(!seller)
+   {
+      throw new Error("order is of Invalid format")
+    }
+   
+ 
+    let data=
+    {
+      _id:orders._id,
+      name:seller.name,
+      UserID:orders.UserId,
+      transactionID:orders.transactionID,
+      status:orders.status,
+      items:orders.items,
+      completionDate:orders.completionDate||''
+    }
+    console.log(data);
+    finalData.push(data);
+  }
+    res.status(200).json(finalData)
+
+  }
+  catch(err)
+  {
+    console.log(err);
+         res.status(500).json({message:"error fetching orders",error:err})
+  }
+});
+
+
+router.post('/claim-Orders/:id', async (req, res) => {
+  const {id}=req.params;
+  console.log(id);
+  try{
+  const order = await Order.findById(id);
+  
+  const response=await Order.findOneAndUpdate({_id:id},{$set:{status:'collected'}},  { new: true })
+  if(response==null)
+  {
+    throw new Error("'The order you are trying to access is claimed or doesnt exist'")
+
+  }
+
+   res.status(200).json({message:"order claimed successfully"});
+}catch(err)
+{
+   return res.status(500).json({message:err.message, error:err})
+}
 });
 router.get('/remove-Product/:id', async (req, res) => {
   const {id}=req.params;

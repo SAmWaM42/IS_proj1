@@ -105,10 +105,11 @@ router.post('/2FA', upload.none(), async (req, res) => {
 });
 //update route
 router.post('/update', async (req, res) => {
-  const { name, email, _id, oldPassword, newPassword, phoneNumber, role } = req.body;
-  console.log(req.body);
+  console.log("received update",req.body);
+  const { name, email, id, oldPassword, newPassword, phoneNumber, role } = req.body;
+  
   try {
-    const me = await User.findById(_id);
+    const me = await User.findById(id);
     if (!me) return res.status(400).json({ message: 'no user with the above ID exists' });
      const updates = {};
 
@@ -132,7 +133,7 @@ router.post('/update', async (req, res) => {
     const fieldsToUpdate = ['name', 'email', 'phoneNumber', 'role'];
      fieldsToUpdate.forEach(field => {
            if (req.body[field] !== undefined && req.body[field] !== null && req.body[field].toString().trim() !== '') {
-             if (req.body[field] !== user[field]) { // Only update if different from current value
+             if (req.body[field] !== me[field]) { // Only update if different from current value
                     updates[field] = req.body[field];
                 }
             }
@@ -145,24 +146,19 @@ router.post('/update', async (req, res) => {
             return res.status(200).json({ message: 'No changes provided to update.' }); // Indicate no update needed
         }
     const updatedUser = await User.findByIdAndUpdate(
-      _id,
-      {
-        passwordHash: hashedPassword,
-        name: name,
-        phoneNumber: phoneNumber,
-        email: email,
-        role: role
-      },
+      {_id:id},
+    { $set: updates },
+      
       { new: true, runValidators: true } // 'new: true' returns the updated document, 'runValidators: true' runs schema validations
     );
 
     if (!updatedUser) {
-      return res.status(404).json({ message: 'Update failed' });
+      return res.status(500).json({ message: 'Update failed' });
     }
      res.status(200).json({
             message: 'Profile updated successfully!', // Correct success message
             user: { // Send back relevant updated user data (avoid sending passwordHash)
-                id: updatedUser._id,
+                id: updatedUser.id,
                 name: updatedUser.name,
                 email: updatedUser.email,
                 phoneNumber: updatedUser.phoneNumber,

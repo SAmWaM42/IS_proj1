@@ -53,6 +53,7 @@ export const ContextProvider=({children})=>
         setCartVisible,
         loggedIn,
         myData,
+        gottenSelf,
         handleUpdate
 
     }

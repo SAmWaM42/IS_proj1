@@ -30,8 +30,7 @@ function Profile({ userData }) {
 
     const update = async (e) => {
         let  updatedFields=
-        {
-            id: _id,
+        {     id: _id,
         }
         if (formValues.name !== name && formValues.name.trim() !== '') {
             updatedFields.name = formValues.name;
@@ -60,18 +59,26 @@ function Profile({ userData }) {
             return;
         }
 
-
+    console.log("Client-side: updatedFields object BEFORE stringify:", updatedFields);
+    console.log("Client-side: JSON.stringify(updatedFields):", JSON.stringify(updatedFields));
+    console.log("Client-side: Sending to URL:");
 
         try {
           
             const result = await fetch(url, {
                 credentials: "include",
                 method: 'POST',
+                headers:{
+                     'Content-Type': 'application/json'
+                },
                 body: JSON.stringify(updatedFields)
             })
             if (!result.ok) {
                 console.log("not successfully updated");
             }
+
+
+            alert("successfully updated");
 
         }
         catch (error) {

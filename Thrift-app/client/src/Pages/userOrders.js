@@ -4,22 +4,25 @@ import { useNavigate } from 'react-router-dom';
 
 
 
-function ViewOrders() {
+function UserOrders() {
 
 
     const navigate = useNavigate();
 
-    const url = "http://localhost:5000/product/get-Orders";
+    const url = "http://localhost:5000/product/get-user-Orders";
+    const claimUrl="http://localhost:5000/product/claim-Orders"
 
 
 
     const [products, setProducts] = useState([]);
-    const [LoadingProducts, setLoadingProducts] = useState(true); const [searchValues, setSearchValues] = useState(null)
+    const [LoadingProducts, setLoadingProducts] = useState(true);
+     const [searchValues, setSearchValues] = useState(null)
     const [visibleItemIds, setVisibleItemIds] = useState(new Set());
+   
 
-    useEffect(() => {
+        const getProducts=async () => {
         try {
-            fetch(url, { credentials: 'include' }).then(response => response.json()).then(data => setProducts(data))
+            await fetch(url, { credentials: 'include' }).then(response => response.json()).then(data => setProducts(data))
         }
         catch (error) {
             console.error('Error fetching products:', error);
@@ -28,7 +31,10 @@ function ViewOrders() {
         finally {
             setLoadingProducts(false)
         }
-    }, [url]);
+    };
+
+    useEffect(()=>
+    getProducts(),[url]);
 
 
     const Search = async (e) => {
@@ -81,6 +87,31 @@ function ViewOrders() {
         });
 
     }
+    const claimItem=async (id)=>
+    {
+        try
+        {
+            const response=await fetch(`${claimUrl}/${id}`,{credentials:'include',method:'POST'})
+            if(!response.ok)
+            {
+               throw new Error("network error while claimimg product")
+            }
+
+         window.location.reload();
+
+        }
+        catch(err)
+        {
+            console.log("error claiming produt",err)
+        }
+
+    }
+    if(LoadingProducts)
+    {
+        return(
+            <h1>Loading your Orders</h1>
+        );
+    }
 
 
 
@@ -96,31 +127,38 @@ function ViewOrders() {
                             <input type='text' name='search' onChange={handleInputChange}></input>
                             <button type='submit'>Search</button>
                         </form>
-                        <div className="product-list">
+                        <div>
                             {
 
                                 products.map((data) =>
 
                                     <div>
+                                        
                                         <div>
-                                            <h3>{data.name}</h3>
-                                            <h3>{data.transactionID}</h3>
-                                            <h3>{data.status}</h3>
-                                            <h3>{data.totalPrice}</h3>
-                                            <h3>{data.completionDate}</h3>
+                                            <h3>Vendor:{data.name}</h3>
+                                            <h3>transactionID:{data.transactionID}</h3>
+                                            <h3>transactionStatus:{data.status}</h3>
+                                            <h3>totalPayment:{data.totalPrice}</h3>
+                                            <h3>completionDate:{data.completionDate}</h3>
                                             <button onClick={() => displayItems(data._id)}>Items</button>
+                                              <button onClick={()=>claimItem(data._id)}>Collect Order</button>
                                         </div>
+                                         {visibleItemIds.has(data._id) && (
                                         <div >
-
+                                            
                                             {data.items.map((item) =>
+                                            <div>
                                                 <div >
-                                                    <h3>{item.name}</h3>
-                                                    <h3>{item.quantity}</h3>
-                                                    <h3>{item.price}</h3>
-                                                    <h3>{item.price * item.quantity}</h3>
+                                                    <h3>ItemName:{item.name}</h3>
+                                                    <h3>itemQuantity:{item.quantity}</h3>
+                                                    <h3>itemPrice:{item.price}</h3>
+                                                    <h3>totalPrice:{item.price * item.quantity}</h3>
+                                                </div>
+                                              
                                                 </div>
                                             )}
                                         </div>
+                                         )}
 
 
                                     </div>
@@ -147,4 +185,4 @@ function ViewOrders() {
 }
 
 
-export default ViewOrders;
+export default UserOrders;
