@@ -1,51 +1,78 @@
 .form-container {
-  background-color: #f9f6fb; /* subtle lavender-white blend */
-  padding: 2rem;
-  border-radius: 1.5rem;
-  box-shadow: 0 4px 15px rgba(76, 42, 133, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
   max-width: 500px;
   margin: 2rem auto;
+  padding: 2rem;
+  background-color: #fffaf2;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 15px rgba(204, 77, 60, 0.15);
   font-family: 'Segoe UI', sans-serif;
 }
 
-.form-container label {
-  display: block;
-  margin-bottom: 0.25rem;
-  font-weight: bold;
-  color: #4c2a85;
-}
-
-.form-container input[type="text"],
-.form-container input[type="email"],
-.form-container input[type="file"],
-.form-container input[type="password"],
-.form-container input[type="number"] {
+.form-group {
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  padding: 0.6rem;
-  margin-bottom: 1.2rem;
-  border: 1px solid #b480d6;
-  border-radius: 0.75rem;
-  background-color: #ffffff;
-  color: #4c2a85;
-  transition: border-color 0.3s ease;
+  text-align: left;
 }
 
-.form-container input:focus {
-  border-color: #4c2a85;
+.form-container label {
+  color: #cc4d3c;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #e6e3db;
+  border-radius: 5px;
+  background-color: #fdfcf9;
+  color: #3d3d3d;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+input:focus,
+select:focus {
   outline: none;
+  border-color: #cc4d3c;
+  background-color: #fff2ec;
 }
 
-.form-container button {
-  background-color: #b480d6;
-  color: white;
+.password-toggle-button {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  background: none;
   border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 2rem;
+  color: #cc4d3c;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button {
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: none;
+  background-color: #cc4d3c;
+  color: white;
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
-.form-container button:hover {
-  background-color: #4c2a85;
+button:hover {
+  background-color: #a03a2e;
 }
+
