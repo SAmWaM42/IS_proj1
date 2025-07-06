@@ -82,13 +82,13 @@ function ViewOrders() {
 
     }
 
-    
+
 
 
     return (
 
         <div className="browse-container">
-            <h1>Your current products</h1>
+            <h1>Your Orders </h1>
             {
 
                 (products.length) ? (

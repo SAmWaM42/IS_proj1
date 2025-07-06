@@ -135,7 +135,7 @@ const{myData,loggedIn,handleUpdate}=contextData;
                         (
                             <div key={field.key}>
                                 <label>{field.label}</label>
-                                <input type={field.type} name={field.name} value={formValues[field.name]} onChange={handleInputChange} />
+                                <input type={field.type} name={field.name}  placeholder={field.placeholder} value={formValues[field.name]} onChange={handleInputChange} />
                             </div>
                         )
                       

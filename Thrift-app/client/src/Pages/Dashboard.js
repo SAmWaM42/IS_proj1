@@ -11,7 +11,10 @@ import Profile from './Profile.js';
 import ViewProducts from './ViewProducts.js';
 import ViewOrders from './ViewOrders.js';
 import UserOrders from './userOrders.js'
+import AdminProd from './AdminProd.js';
+import AdminUser from './AdminUsers.js';
 import { GlobalContext } from '../Components/ContextWrapper.js';
+
 
 
 
@@ -172,10 +175,21 @@ function Dashboard() {
         dash_nav_elements = [
             { key: 'Chats', Label: 'Chats', destination: '/Dashboard/Chats' },
             { key: 'Profile', Label: 'Profile', destination: '/Dashboard/Profile' },
-            { key: 'myOrders', Label: 'myOrders', destination: '/Dashboard/userOrders' }
+            { key: 'myOrders', Label: 'myOrders', destination: '/Dashboard/userOrders' },
+        
 
         ]
     }
+    if (myData.role === "admin") {
+        dash_nav_elements = [
+            { key: 'Chats', Label: 'Chats', destination: '/Dashboard/Chats' },
+            { key: 'Profile', Label: 'Profile', destination: '/Dashboard/Profile' },
+             { key: 'adminProd', Label: 'AdminProducts', destination: '/Dashboard/adminProd' },
+                { key: 'adminUser', Label: 'AdminUser', destination: '/Dashboard/adminUser' }
+            
+        ]
+    }
+    
 
     const dest_url = 'product';
 
@@ -234,6 +248,15 @@ function Dashboard() {
                     return(
                    <UserOrders></UserOrders>
                     );
+                    case'adminProd':
+                    return(
+                    <AdminProd></AdminProd>
+
+                    );
+                    case 'adminUser':
+                        return(
+                       <AdminUser></AdminUser>
+                        );
 
 
 

@@ -102,15 +102,12 @@ function ViewProducts(){
     return (
 
         <div className="browse-container">
-            <h1>Your current products</h1>
+            <h1>Your Added products</h1>
             {
                
                 (products.length) ? (
                     <div>
-                        <form onSubmit={Search} >
-                            <input type='text' name='search' onChange={handleInputChange}></input>
-                            <button  type='submit'>Search</button>
-                        </form>
+                       
                     <div className="product-list">
                         {
 

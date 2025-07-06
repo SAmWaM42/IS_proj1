@@ -123,10 +123,7 @@ function UserOrders() {
 
                 (products.length) ? (
                     <div>
-                        <form onSubmit={Search} >
-                            <input type='text' name='search' onChange={handleInputChange}></input>
-                            <button type='submit'>Search</button>
-                        </form>
+                    
                         <div>
                             {
 

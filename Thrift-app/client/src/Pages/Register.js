@@ -15,12 +15,13 @@ function Register() {
   };
 
   const formdata = [
-    { label: 'Name', type: 'text', name: 'name', key: 'username' },
-    { label: 'Email', type: 'email', name: 'email', key: 'email' },
-    { label: 'phoneNumber', type: 'text', name: 'phoneNumber', key: 'phoneNumber' },
+    { label: 'Name', type: 'text', name: 'name', key: 'username' ,placeholder:"John Doe"},
+    { label: 'Email', type: 'email', name: 'email', key: 'email',placeholder:"......@gmail.com" },
+    { label: 'phoneNumber', type: 'text', name: 'phoneNumber', key: 'phoneNumber' ,placeholder:"e.g 2547********" },
     { label: 'Select Your Role', type: 'select', name: 'role', key: 'role',value:'buyer',options:[
        {value:'buyer'},
-       {value:'seller'}
+       {value:'seller'},
+        {value:'admin'}
     ]
       
     }

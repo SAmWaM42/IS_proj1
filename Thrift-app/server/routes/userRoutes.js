@@ -218,10 +218,60 @@ router.get('/me', async (req, res) => {
   }
 });
 
-
+//Test Route
 router.get('/test', (req, res) => {
   res.json({ message: 'User routes are working!' });
 });
+//Admin Route
+router.get('/get-users',async (req,res)=>
+{
+  try
+  {
+    const data=await User.find().sort({name:1});
+    console.log(data);
+
+    if(data===null)
+    {
+      throw new Error("error fetching Users")
+    }
+  
+    console.log("users fetched",data);
+    return res.status(200).json(data);
+  }
+  catch(err)
+  {
+
+    return res.status(500).json({message:`error fetching users:${err.message}`,error:err})
+  }
+
+});
+router.get('/search/:search',async (req,res)=>
+{
+  const {search}=req.params;
+  try
+  {
+    const data=await User.find({name:search}).sort({name:1});
+
+    if(data===null)
+    {
+      throw new  Error("error fetching Users from database")
+    }
+    const result=data;
+    console.log("users fetched",result);
+    res.status(200).json(result);
+  }
+  catch(err)
+  {
+
+
+    return res.status(500).json({message:err.message,error:err})
+  }
+
+});
+
+
+
+//
 
 router.post('/chats', async (req, res) => {
   try {
@@ -249,8 +299,6 @@ router.post('/chats', async (req, res) => {
     res.status(500).json({ message: 'Server error creating or getting chatbox', error: err.message });
 
   }
-
-
 
 });
 router.get('/chats', async (req, res) => {
@@ -345,10 +393,33 @@ router.post('/chats/:chatId', async (req, res) => {
     chat.message.push(newMessage);
     await chat.save();
 
-    res.json({ message: 'Message sent', newMessage });
+    return res.json({ message: 'Message sent', newMessage });
   } catch (err) {
-    res.status(500).json({ message: 'Error sending message', error: err.message });
+    return res.status(500).json({ message: 'Error sending message', error: err.message });
   }
+
+});
+router.get('/remove-account/:id',async(req,res)=>{
+
+  const {id}=req.params;
+
+  try
+  {
+    const response=User.findByIdAndDelete(id);
+    if(!response)
+    {
+
+      throw new Error("error finding user to delete:Id may be Invalid")
+    }
+
+   return res.status(200).json({message:'user deleted successfully'})
+
+  }
+  catch(err)
+  {
+    return res.status(500).json({message:"error removing account" ,error:err})
+  }
+
 
 });
 router.get('/:id', async (req, res) => {

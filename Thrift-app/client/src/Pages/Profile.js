@@ -17,6 +17,9 @@ function Profile({ userData }) {
         oldPassword: '', // These should always start empty
         newPassword: ''
     });
+
+    const admin=(role==="admin");
+    console.log(admin);
     const url = "http://localhost:5000/user/update"
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -103,10 +106,23 @@ function Profile({ userData }) {
                 <input type='email' name='email' placeholder={email} onChange={handleInputChange}></input>
             </div><div>
                   <label for='role'>role</label>
-                <select name='role' value={role} onChange={handleInputChange}>
-                    <option type='test' name='name' value='buyer'>buyer</option>
-                    <option type='test' name='name' value='seller'>seller</option>
-                </select></div>
+                  {
+              admin?(
+                 <select name='role' value={role} onChange={handleInputChange} disabled>
+                    <option type='text' name='' value='admin'>admin</option>
+                
+                </select>
+
+                
+               ):
+                (
+                     <select name='role' value={role} onChange={handleInputChange}>
+                    <option type='text' name='name' value='buyer'>buyer</option>
+                    <option type='text' name='name' value='seller'>seller</option>
+                </select>
+                )
+}
+                 </div>
             <div>
                 <p>To change password</p>
                 <div>

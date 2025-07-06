@@ -74,10 +74,13 @@ function App() {
                 <Route path='/Dashboard/myProducts' element={<Dashboard></Dashboard>}/>
                 <Route path='/Dashboard/myOrders' element={<Dashboard></Dashboard>}/>
                  <Route path='/Dashboard/userOrders' element={<Dashboard></Dashboard>}/>
+                  <Route path='/Dashboard/adminUser' element={<Dashboard></Dashboard>}/>
+                   <Route path='/Dashboard/adminProd' element={<Dashboard></Dashboard>}/>
                 <Route path="/Browse" element={<Browse></Browse>} />
                 <Route path="/product/:id" element={<IndividualProduct></IndividualProduct>} />
                 <Route path="/user/:userId" element={<Dashboard></Dashboard>} />
-            
+                
+        
 
 
             </Routes>

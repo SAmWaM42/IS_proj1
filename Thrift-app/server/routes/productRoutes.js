@@ -10,7 +10,7 @@ const path = require('path');
 const natural = require("natural");
 const { removeStopwords, eng } = require('stopword');
 const synonyms = require('synonyms');
-const { re } = require('synonyms/dictionary');
+const { re, naturally } = require('synonyms/dictionary');
 const wordTokenizer = new natural.WordTokenizer();
 const stemmer = natural.PorterStemmer;
 
@@ -155,6 +155,33 @@ router.post('/add-to-cart', async (req, res) => {
 
   }
 
+
+
+});
+//admin search route
+router.get('/adminSearch/:search', async (req, res) => {
+
+   const search=req.params.search;
+   try{
+   const user=User.findOne({name:search});
+   if(!user)
+   {
+    return res.status(401).json(`The User ${search} not found `);
+   }
+   const prodData=await Product.find({userId:user._id});
+   if(prodData===null)
+   {
+     return res.status(401).json(`no products owned by ${search} found `);
+   }
+   res.status(200).json(prodData);
+   console.log(relevantProds.length,"products owned by specified user successfully found and sent" )
+  }
+  catch(err)
+  {
+  res.status(500).json({message:err.message,error:err});
+  }
+   
+  
 
 
 });
@@ -346,16 +373,16 @@ router.get('/remove-Product/:id', async (req, res) => {
     return res.status(401).json({message:'This product is currently inavailable'})
   }
   const response=await Product.findOneAndDelete({_id:id})
-  if(!response.ok)
+  if(!response)
   {
     throw new Error("Product removal not successful")
 
   }
 
-   res.status(200).json({message:"Product removed successfully"});
+   return res.status(200).json({message:"Product removed successfully"});
 }catch(err)
 {
-   return res.status(500).json({message:'Error removing product', error:err})
+   return res.status(500).json({message:err.message, error:err})
 }
 });
 
