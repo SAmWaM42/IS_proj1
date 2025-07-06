@@ -3,13 +3,14 @@ const router = express.Router();
 const Product = require('../Schemas/ProductSchema'); // Import the Product model
 const User = require('../Schemas/UserSchema'); // Import the User model
 const Cart = require('../Schemas/CartSchema')
+const Order=require('../Schemas/OrderSchema');
 const multer = require('multer'); // For handling file uploads
 const path = require('path');
 //includes to mimic A.I. search integration
 const natural = require("natural");
 const { removeStopwords, eng } = require('stopword');
 const synonyms = require('synonyms');
-const { re } = require('synonyms/dictionary');
+const { re, naturally } = require('synonyms/dictionary');
 const wordTokenizer = new natural.WordTokenizer();
 const stemmer = natural.PorterStemmer;
 
@@ -157,6 +158,33 @@ router.post('/add-to-cart', async (req, res) => {
 
 
 });
+//admin search route
+router.get('/adminSearch/:search', async (req, res) => {
+
+   const search=req.params.search;
+   try{
+   const user=User.findOne({name:search});
+   if(!user)
+   {
+    return res.status(401).json(`The User ${search} not found `);
+   }
+   const prodData=await Product.find({userId:user._id});
+   if(prodData===null)
+   {
+     return res.status(401).json(`no products owned by ${search} found `);
+   }
+   res.status(200).json(prodData);
+   console.log(relevantProds.length,"products owned by specified user successfully found and sent" )
+  }
+  catch(err)
+  {
+  res.status(500).json({message:err.message,error:err});
+  }
+   
+  
+
+
+});
 router.get('/search/:search', async (req, res) => {
 
    const search=req.params.search;
@@ -227,10 +255,137 @@ router.get('/cart', async (req, res) => {
   }
 
 
-
-
-
 });
+router.get('/get-Products', async (req, res) => {
+  const products = await Product.find({UserID:req.session.user.id});
+  res.json(products);
+});
+
+router.get('/get-Orders', async (req, res) => {
+  try
+  {
+  
+    const allOrders = await Order.find({sellerId:req.session.user.id});   
+   if(!allOrders)
+   {
+         req.status(200).json({message:"no Orders in history"})
+   }
+    const finalData=[];
+ for(const orders of allOrders)
+ {
+   const buyer=await User.findById(orders.UserId);
+   if(!buyer)
+   {
+      throw new Error("order is of Invalid format")
+    }
+   
+ 
+    let data=
+    {
+      _id:orders._id,
+      name:buyer.name,
+      UserID:orders.UserId,
+      transactionID:orders.transactionID,
+      status:orders.status,
+      items:orders.items,
+      completionDate:orders.completionDate||''
+    }
+    console.log(data);
+    finalData.push(data);
+  }
+    res.status(200).json(finalData)
+
+  }
+  catch(err)
+  {
+    console.log(err);
+         res.status(500).json({message:"error fetching orders",error:err})
+  }
+});
+router.get('/get-user-Orders', async (req, res) => {
+  try
+  {
+  
+    const allOrders = await Order.find({UserId:req.session.user.id});   
+   if(!allOrders)
+   {
+         req.status(200).json({message:"no Orders in history"})
+   }
+    const finalData=[];
+ for(const orders of allOrders)
+ {
+   const seller=await User.findById(orders.sellerId);
+   if(!seller)
+   {
+      throw new Error("order is of Invalid format")
+    }
+   
+ 
+    let data=
+    {
+      _id:orders._id,
+      name:seller.name,
+      UserID:orders.UserId,
+      transactionID:orders.transactionID,
+      status:orders.status,
+      items:orders.items,
+      completionDate:orders.completionDate||''
+    }
+    console.log(data);
+    finalData.push(data);
+  }
+    res.status(200).json(finalData)
+
+  }
+  catch(err)
+  {
+    console.log(err);
+         res.status(500).json({message:"error fetching orders",error:err})
+  }
+});
+
+
+router.post('/claim-Orders/:id', async (req, res) => {
+  const {id}=req.params;
+  console.log(id);
+  try{
+  const order = await Order.findById(id);
+  
+  const response=await Order.findOneAndUpdate({_id:id},{$set:{status:'collected'}},  { new: true })
+  if(response==null)
+  {
+    throw new Error("'The order you are trying to access is claimed or doesnt exist'")
+
+  }
+
+   res.status(200).json({message:"order claimed successfully"});
+}catch(err)
+{
+   return res.status(500).json({message:err.message, error:err})
+}
+});
+router.get('/remove-Product/:id', async (req, res) => {
+  const {id}=req.params;
+  try{
+  const products = await Product.findById(id);
+  if(!products)
+  {
+    return res.status(401).json({message:'This product is currently inavailable'})
+  }
+  const response=await Product.findOneAndDelete({_id:id})
+  if(!response)
+  {
+    throw new Error("Product removal not successful")
+
+  }
+
+   return res.status(200).json({message:"Product removed successfully"});
+}catch(err)
+{
+   return res.status(500).json({message:err.message, error:err})
+}
+});
+
 router.get('/', async (req, res) => {
   const products = await Product.find();
   res.json(products);

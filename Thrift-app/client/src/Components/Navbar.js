@@ -1,16 +1,16 @@
 
 import React, { useState, useEffect ,useContext } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
 import { GlobalContext } from './ContextWrapper';
 
 
-function Navbar({link_data})
+function Navbar({link_data,renderButton})
 {
    const contextData = useContext(GlobalContext);
  
-  
-  const{cartVisible,setCartVisible,loggedIn}=contextData;
+   const navigate=useNavigate();
+  const{cartVisible,setCartVisible,loggedIn,handleUpdate}=contextData;
 
 
     
@@ -20,6 +20,32 @@ function Navbar({link_data})
 
   };
   console.log(loggedIn);
+  const logOut=async ()=>
+  {
+    const url="http://localhost:5000/user/logout";
+    try
+    {
+      const response=await fetch(url,{
+        credentials:"include"
+      }) 
+      if(!response.ok)
+      {
+        throw new Error("error loggong out")
+       
+      }
+      const result=await response.json();
+       
+      handleUpdate({myData:result,loggedIn:false});
+      navigate('/login');
+      alert(result.message);
+
+    }
+    catch(err)
+    {
+
+    }
+
+  }
 
     
     return(
@@ -30,10 +56,18 @@ function Navbar({link_data})
              }
 
              {
+             
               loggedIn&&
               (  
-                <button onClick={make_visible}>Cart</button>
-              )
+                renderButton&&
+                (
+               <div>
+                <button onClick= {logOut}>Logout</button>
+                <button style={{marginLeft:'10em'}} onClick={make_visible}>Cart</button>
+
+             </div>
+                )
+               )
 
              }
            </nav>

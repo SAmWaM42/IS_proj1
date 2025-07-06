@@ -22,7 +22,8 @@ function Chats() {
     const handleChatClick = (chatId) => {
         navigate(`/Dashboard/chatbox/${chatId}`);
     };
-    if (!chats) {
+
+    if (!chats||chats.length===0) {
         return (
             <div>
                 <h2>No conversations started</h2>

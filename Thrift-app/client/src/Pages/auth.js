@@ -27,8 +27,14 @@ function  Auth()
 
 
     return(
-
-        <Form formData={formdata} button_data={button_data} dest_url={dest_url}></Form>
+     <div> 
+      
+        <Form formData={formdata} button_data={button_data} dest_url={dest_url} id='auth-form'>send</Form>
+         <button
+       type="submit"
+         form="auth-form"        // replace with your Form's form id, or wrap Form in <form id="login-form">
+        className="login-button">Send</button>
+        </div>
     );
 
 

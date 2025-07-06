@@ -15,12 +15,13 @@ function Register() {
   };
 
   const formdata = [
-    { label: 'name', type: 'text', name: 'name', key: 'username' },
-    { label: 'email', type: 'email', name: 'email', key: 'email' },
-    { label: 'phone number', type: 'text', name: 'phonenumber', key: 'phonenumber' },
-    { label: 'select your role', type: 'select', name: 'role', key: 'role',value:'buyer',options:[
+    { label: 'Name', type: 'text', name: 'name', key: 'username' ,placeholder:"John Doe"},
+    { label: 'Email', type: 'email', name: 'email', key: 'email',placeholder:"......@gmail.com" },
+    { label: 'phoneNumber', type: 'text', name: 'phoneNumber', key: 'phoneNumber' ,placeholder:"e.g 2547********" },
+    { label: 'Select Your Role', type: 'select', name: 'role', key: 'role',value:'buyer',options:[
        {value:'buyer'},
-       {value:'seller'}
+       {value:'seller'},
+        {value:'admin'}
     ]
       
     }
@@ -38,7 +39,7 @@ function Register() {
       <div className="register-card">
         <img src="\waridilogo (2).png" alt="Waridi Logo" className="logo" />
         <h2 className="title">Create Your Waridi Account</h2>
-        <Form formData={formdata} button_data={button_data} dest_url={dest_url} />
+        <Form formData={formdata} button_data={button_data} dest_url={dest_url} id='register-form'/>
 
     {/*addition*/}
 

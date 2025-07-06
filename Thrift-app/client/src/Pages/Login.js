@@ -1,15 +1,22 @@
 import Button from "../Components/Button";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 import Form  from "../Components/Form";
 import './Login.css';
+import { GlobalContext } from '../Components/ContextWrapper.js';
 
 
 function Login()
 {
+
+  const contextData = useContext(GlobalContext);
+  const {loggedIn} = contextData;
+
+  
     const navigate = useNavigate();
 
+  
   
     const formdata = [
        
@@ -27,11 +34,10 @@ function Login()
     <div className="login-card">
       <img src="\waridilogo (2).png" alt="Waridi Logo" className="logo" />
       <h2 className="title">Welcome to Waridi</h2>
-<Form formData={formdata} dest_url={dest_url} />
 
 
+<Form formData={formdata} dest_url={dest_url}  id='login-form'/>
 
- 
      {/*added*/}
     <div className="button-group">
        <button

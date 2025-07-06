@@ -6,6 +6,7 @@ export const ContextProvider=({children})=>
     const [loggedIn,setLoggedIn]=useState(false);
     const [gottenSelf,setGottenSelf]=useState(false);
     const [cartVisible,setCartVisible]= useState(false);
+    const [myData,setMyData]=useState({});
     
 
     const getSelf=useCallback(async ()=>
@@ -21,6 +22,8 @@ export const ContextProvider=({children})=>
         if(response)
         {
           setLoggedIn(true);
+          const result=await response.json();
+          setMyData(result);
         }
 
       }
@@ -37,11 +40,21 @@ export const ContextProvider=({children})=>
     useEffect(()=>{
         getSelf();
     },[])
+
+    const handleUpdate=({myData,loggedIn})=>
+    {
+      setMyData(myData);
+      setLoggedIn(loggedIn);
+
+    }
     const contextData=
     {
         cartVisible,
         setCartVisible,
-        loggedIn
+        loggedIn,
+        myData,
+        gottenSelf,
+        handleUpdate
 
     }
 
