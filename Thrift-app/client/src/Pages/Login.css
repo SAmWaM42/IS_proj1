@@ -1,38 +1,99 @@
-/* Login.css */
-
 body {
   margin: 0;
-  padding: 0;
-  background-color: #f9f6fb;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f8f5ee; /* Soft cream background */
+  color: #3d3d3d;
 }
 
 .login-page {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #e0bce0, #ffffff);
+  height: 100vh;
 }
 
-.login-form-wrapper {
+.login-card {
   background-color: #ffffff;
-  padding: 2rem;
-  border-radius: 1.5rem;
-  box-shadow: 0 4px 20px rgba(180, 128, 214, 0.2);
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 0 15px rgba(204, 77, 60, 0.15);
+  width: 350px;
+  text-align: center;
+  border: 1px solid #e6e3db;
 }
 
-/* Button class used in Login.jsx */
-.login-button {
-  background-color: #b480d6;
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 2rem;
+.logo {
+  height: 70px;
+  margin-bottom: 20px;
+}
+
+.title {
+  color: #cc4d3c;
+  margin-bottom: 20px;
+  font-size: 1.8rem;
   font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
-.login-button:hover {
-  background-color: #4c2a85;
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #e6e3db;
+  border-radius: 5px;
+  background-color: #fdfcf9;
+  color: #3d3d3d;
+  font-size: 1rem;
+}
+
+input:focus {
+  outline: none;
+  border-color: #cc4d3c;
+  background-color: #fcf9f5;
+}
+
+label {
+  color: #e66d50; /* Pale orange */
+  font-weight: bold;
+  display: block;
+  margin-bottom: 6px;
+  text-align: left;
+}
+
+.login-button,
+.signup-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #cc4d3c; /* Orange */
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 10px;
+}
+
+.login-button:hover,
+.signup-button:hover {
+  background-color: #a03a2e; /* Darker orange on hover */
+  transform: scale(1.02);
+}
+
+.button-group {
+  margin-top: 20px;
+}
+
+.password-toggle-button {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #cc4d3c;
+  cursor: pointer;
+  font-weight: bold;
 }
