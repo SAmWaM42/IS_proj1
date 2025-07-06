@@ -17,7 +17,14 @@ function Register() {
   const formdata = [
     { label: 'Name', type: 'text', name: 'name', key: 'username' },
     { label: 'Email', type: 'email', name: 'email', key: 'email' },
-    { label: 'Password', type: 'password', name: 'password', key: 'password' }
+    { label: 'phoneNumber', type: 'text', name: 'phoneNumber', key: 'phoneNumber' },
+    { label: 'Select Your Role', type: 'select', name: 'role', key: 'role',value:'buyer',options:[
+       {value:'buyer'},
+       {value:'seller'}
+    ]
+      
+    }
+   
   ];
 
   const dest_url = "user/register"; // This should be the endpoint for registration

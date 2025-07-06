@@ -1,3 +1,4 @@
+
 require('dotenv').config();
 const express = require('express');
 const session=require('express-session');
@@ -38,6 +39,12 @@ console.log(uri);// Use environment variable for production
 mongoose.connect(uri)
     .then(() => console.log('MongoDB connection established successfully!'))
     .catch(err => console.error('MongoDB connection error:', err));
+
+app.use((req, res, next) => {
+    console.log(`[SERVER_APP_GLOBAL] Incoming request: ${req.method} ${req.originalUrl}`);
+    console.log(`[SERVER_APP_GLOBAL] Request Body (raw):`, req.body); // Check if body is parsed here
+    next();
+});
 
 
 app.use('/user', userroutes);
@@ -86,18 +93,22 @@ app.use((err, req, res, next) => {
 
 app.listen(port,async () => {
     console.log(`Server is running on http://localhost:${port}`);
-       try {
-        const listener = await ngrok.forward({ addr: port, authtoken_from_env: true });
-        const publicUrl = listener.url();
+     /*  try {
+       const listener = await ngrok.forward({ addr: port, authtoken_from_env: true });
+        //const publicUrl = listener.url();
+         process.env.NGROK_CALLBACK = publicUrl;
         console.log(`Ngrok Ingress established at: ${publicUrl}`);
+        console.log(`process.env.NGROK_CALLBACK set to: ${process.env.NGROK_CALLBACK}`);
 
         // Store or use this publicUrl for your Daraja callbacks
         // For example: process.env.NGROK_PUBLIC_URL = publicUrl;
         // Or you can pass it to a function that needs to configure Mpesa calls
+        
 
     } catch (error) {
         console.error('Error starting ngrok tunnel:', error);
-        process.exit(1);
+       // process.exit(1);
     }
+       */
 });
 

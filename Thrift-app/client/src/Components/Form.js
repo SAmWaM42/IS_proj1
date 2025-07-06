@@ -9,6 +9,7 @@ function Form({ formData, button_data, dest_url }) {
     const navigate = useNavigate();
     const [formValues, setFormValues] = useState(() => {
         const initialValues = {};
+
         formData.forEach(field => {
             initialValues[field.name] = ''; // Initialize each field to empty string
         });
@@ -72,6 +73,7 @@ function Form({ formData, button_data, dest_url }) {
     };
     const handleInputChange = (e) => {
         const { name, value } = e.target;
+          console.log(`Input changed: Name=${name}, Value=${value}`);
         setFormValues(prevValues => ({
             ...prevValues,
             [name]: value,
@@ -103,19 +105,37 @@ function Form({ formData, button_data, dest_url }) {
                                     onChange={handleFileChange} // <--- Use the file handler
                                 />
                             </div>
-                        )
-                        :
+                        ):field.type==='select'?
+                        (
+                            <div>
+                                <label>{field.label}</label>
+                            <select name={field.name} onChange={handleInputChange} value={formValues[field.name]}>
+                                 <option value='' disabled>
+                                        Select an option
+                                    </option>
+                                {        
+                                    field.options.map(option=>(
+                                     <option value={option.value}  >
+                                        {option.value}
+                                    </option>
+                                    ))
+
+                                }
+
+                            </select>
+                            </div>
+
+                        ):
                         (
                             <div key={field.key}>
                                 <label>{field.label}</label>
                                 <input type={field.type} name={field.name} value={formValues[field.name]} onChange={handleInputChange} />
                             </div>
                         )
+                      
 
                 ))}
-            <Button
-            
-            />
+            <Button />
         </form>
 
     )

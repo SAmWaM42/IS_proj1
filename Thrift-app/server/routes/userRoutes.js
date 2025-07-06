@@ -3,8 +3,6 @@ const express = require('express');
 
 // Load environment variables from .env file
 
-require('dotenv').config();
-
 
 const bcrypt = require('bcrypt');
 const User = require('../Schemas/UserSchema'); // Adjust the path as necessary
@@ -54,7 +52,7 @@ async function sendOTPEmail(email, code) {
 };
 // REGISTER
 router.post('/register', upload.none(), async (req, res) => {
-  const { name, email } = req.body;
+  const { name, email ,phoneNumber,role } = req.body;
   console.log(req.body);
   try {
     const existingUser = await User.findOne({ email });
@@ -62,7 +60,7 @@ router.post('/register', upload.none(), async (req, res) => {
     const currentDate = new Date();
     const da = currentDate.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
     const code = Math.floor(100000 + Math.random() * 900000); // Generate a 6-digit code
-    const user = new User({ name: name, email: email }); // Default role can be set to 'buyer' or any other role as needed
+    const user = new User({ name: name, email: email ,phoneNumber:phoneNumber ,role:role}); // Default role can be set to 'buyer' or any other role as needed
     const otp = new OTP({ userId: user._id, code: code });
     await user.save();
     await otp.save();

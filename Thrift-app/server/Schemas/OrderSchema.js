@@ -1,17 +1,28 @@
 const mongoose = require('mongoose');
-const OrderItem=require('./OrderItemSchema.js')
-const Cart= new mongoose.Schema({
+const OrderItem=require('./OrderItemSchema.js');
+const Order= new mongoose.Schema({
   UserId: {
     type: mongoose.Schema.Types.ObjectId,
     default: null,
     required: true,
   
   },
-   SessionId: {
-    type: String,
+  sellerId:
+  {
+ type: mongoose.Schema.Types.ObjectId,
     default: null,
-    required: true, 
+    required: true,
   },
+  transactionID:
+  {
+    type:String,
+    required :true
+  },
+  b2cOriginatorConversationId: {
+        type: String,
+        required: false, // Set after B2C payout initiation
+    },
+
   items:
   {
     type:[OrderItem.schema],
@@ -23,6 +34,28 @@ const Cart= new mongoose.Schema({
     required: true,
     min: 0
   },
+  status:
+  {
+    type:String
+  },
+  buyerReceiptID:
+  {
+    type:String,
+      required: false,
+  }
+  ,
+  sellerReceiptID:
+  {
+    type:String,
+    required: false,
+
+  }
+  ,
+  completionDate:
+  {
+    type: Date,
+    required:false
+  },
   createdAt: {
     type: Date,
     default: Date.now
@@ -31,4 +64,4 @@ const Cart= new mongoose.Schema({
   
 });
 
-module.exports = mongoose.model('Cart', Cart);
+module.exports =  mongoose.model('Order', Order);

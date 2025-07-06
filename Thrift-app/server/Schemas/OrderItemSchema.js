@@ -22,6 +22,7 @@ const OrderItem= new mongoose.Schema({
         min:0,
         default:1
     }
+
     
 });
 
