@@ -1,3 +1,4 @@
+/* --- Global Styles --- */
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
@@ -5,12 +6,14 @@ body {
   color: #333;
 }
 
+/* --- Dashboard Layout --- */
 .dashboard-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
+/* --- Navbar --- */
 nav {
   background-color: #1f1f1f;
   color: white;
@@ -32,51 +35,98 @@ nav a:hover {
   color: #ffae42;
 }
 
+/* --- Container --- */
 .container {
   max-width: 1200px;
   margin: 2rem auto;
   padding: 0 1.5rem;
 }
 
+/* --- Headings --- */
 h1, h2, h3 {
   color: #cc4d3c;
+  margin: 0;
 }
 
-.Upload-button {
+/* --- Buttons --- */
+.Upload-button,
+.dash-btn,
+.profile-page button {
   background-color: #cc4d3c;
   color: #fff;
-  padding: 0.8rem 1.5rem;
+  padding: 0.75rem 1.25rem;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: background-color 0.3s;
+  white-space: nowrap;
 }
 
-.Upload-button:hover {
+.Upload-button:hover,
+.dash-btn:hover,
+.profile-page button:hover {
   background-color: #a03a2e;
 }
 
-form input[type="text"],
-form input[type="number"],
-form input[type="file"] {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 20px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  background-color: #fdfcf9;
-  color: #333;
+/* --- Dashboard Add Product Card --- */
+.dash-addproduct-container {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 600px;
+  margin: 2rem auto;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-form label {
+/* --- Header with Heading + Button Side by Side --- */
+.dash-addproduct-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.dash-addproduct-header h2 {
+  color: #cc4d3c;
+  font-size: 1.75rem;
+  margin: 0;
+}
+
+/* --- Form Layout --- */
+.dash-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.dash-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.dash-form-group label {
   color: #cc4d3c;
   font-weight: bold;
-  display: block;
-  margin-bottom: 5px;
+  font-size: 1rem;
 }
 
+.dash-form-group input[type="text"],
+.dash-form-group input[type="number"],
+.dash-form-group input[type="file"] {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  background-color: #fdfcf9;
+  color: #333;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+/* --- Profile Page --- */
 .profile-page {
   background-color: #ffffff;
   padding: 2rem;
@@ -88,16 +138,27 @@ form label {
 }
 
 .profile-page button {
-  background-color: #cc4d3c;
-  color: white;
-  padding: 0.8rem 1.2rem;
-  border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s;
+  margin-top: 1rem;
 }
 
-.profile-page button:hover {
-  background-color: #a03a2e;
+/* --- Responsive: stack header on small screens --- */
+@media (max-width: 500px) {
+  .dash-addproduct-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+}
+.dash-form-group input[type="text"],
+.dash-form-group input[type="number"],
+.dash-form-group input[type="file"] {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  background-color: #fdfcf9;
+  font-size: 1rem;
+  color: #333;
+  box-sizing: border-box;
+  appearance: none; /* removes browser-specific styles */
 }

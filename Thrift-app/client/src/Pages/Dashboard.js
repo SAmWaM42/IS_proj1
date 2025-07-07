@@ -208,22 +208,38 @@ function Dashboard() {
     const renprofile = () => {
         switch (currentRoute) {
             case 'AddProduct':
-                return (
-                    <div>
-                        <Form formData={formdata} button_data={button_data} dest_url={dest_url} id='product-form'></Form>
-                        <div className="button-group">
-                            <button
-                                type="submit"
-                                form="product-form"        // replace with your Form's form id, or wrap Form in <form id="login-form">
-                                className="login-button"
-                            >
-                                Add Product
-                            </button>
-                        </div>
-                    </div>
+  return (
+    <div className="dash-addproduct-container">
+      <div className="dash-addproduct-header">
+        <h2>Add a New Product</h2>
+        <button type="submit" className="Upload-button">Publish</button>
+      </div>
+
+      <form className="dash-form" encType="multipart/form-data">
+        <div className="dash-form-group">
+          <label htmlFor="name">Product Name</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+
+        <div className="dash-form-group">
+          <label htmlFor="description">Description</label>
+          <input type="text" id="description" name="description" required />
+        </div>
+
+        <div className="dash-form-group">
+          <label htmlFor="price">Price</label>
+          <input type="number" id="price" name="price" required />
+        </div>
+
+        <div className="dash-form-group">
+          <label htmlFor="image">Upload Image</label>
+          <input type="file" id="image" name="image" accept="image/*" required />
+        </div>
+      </form>
+    </div>
+  );
 
 
-                );
             case 'Chats':
                 return (
                     <Chats></Chats>
