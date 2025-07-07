@@ -1,68 +1,97 @@
-/* Center the form on the page */
-.page-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-color: #f8f5ee; /* soft background */
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-/* Style the form container */
-.form-container {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 1rem;
-  background-color: #fffaf2;
+.profile-page {
   padding: 2rem;
-  border-radius: 1.5rem;
-  box-shadow: 0 4px 15px rgba(204, 77, 60, 0.15);
-  max-width: 500px;
-  width: 100%;
   font-family: 'Segoe UI', sans-serif;
+  color: #2c2c2c;
+  background-color: #fffaf2;
 }
 
-/* Each form group (label + input) stacks vertically */
-.form-container > div {
+.profile-top {
   display: flex;
-  flex-direction: column;
-  align-items: stretch;
+  align-items: center;
+  gap: 2rem;
 }
 
-/* Label styling */
-.form-container label {
-  margin-bottom: 0.25rem;
-  font-weight: bold;
+.profile-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #cc4d3c;
+}
+
+.profile-info h2 {
+  margin: 0;
+  font-size: 1.8rem;
   color: #cc4d3c;
 }
 
-/* Input styling */
-.form-container input[type="text"],
-.form-container input[type="email"],
-.form-container input[type="file"],
-.form-container input[type="password"],
-.form-container input[type="number"],
+.stats {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+  font-size: 1rem;
+}
+
+.settings-btn {
+  margin-top: 1rem;
+  background-color: #cc4d3c;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 2rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.settings-btn:hover {
+  background-color: #a03a2e;
+}
+
+.no-posts {
+  text-align: center;
+  margin-top: 3rem;
+  font-size: 1.2rem;
+  color: #888;
+}
+
+/* Reuse your orange form styling */
+.form-container {
+  background-color: #fff4ee;
+  padding: 2rem;
+  margin-top: 2rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 15px rgba(204, 77, 60, 0.2);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.form-container label {
+  color: #cc4d3c;
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+.form-container input,
 .form-container select {
   width: 100%;
-  padding: 0.6rem;
-  border: 1px solid #e6b8aa;
-  border-radius: 0.75rem;
-  background-color: #ffffff;
-  color: #3d3d3d;
-  transition: border-color 0.3s ease;
-  box-sizing: border-box;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #f0c3b7;
+  border-radius: 8px;
+  background-color: #fffaf6;
+  font-size: 1rem;
+  color: #333;
 }
 
 .form-container input:focus,
 .form-container select:focus {
   border-color: #cc4d3c;
   outline: none;
-  background-color: #fff2ec;
+  background-color: #fef8f6;
 }
 
-/* Button styling */
 .form-container button {
   background-color: #cc4d3c;
   color: white;
@@ -71,7 +100,6 @@
   border-radius: 2rem;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
 .form-container button:hover {
