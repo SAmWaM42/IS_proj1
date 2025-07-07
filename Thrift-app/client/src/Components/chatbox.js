@@ -3,6 +3,7 @@ import './chatbox.css';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
+import { GlobalContext } from './ContextWrapper.js';
 
 function Message({ data }) {
     return (
@@ -16,6 +17,8 @@ function Message({ data }) {
 
 function Chatbox({ message,reload }) {
     const [input, setInput] = useState('');
+  const contextData = useContext(GlobalContext);
+  const { myData } = contextData || {};
     const navigate = useNavigate();
     const { chatId } = useParams(); // Assuming the URL contains a parameter for the chat ID or user ID
    
@@ -68,7 +71,15 @@ function Chatbox({ message,reload }) {
 
                         {
                             message.map((msg) => (
+                                (msg.SenderId===myData._id)?
+                                (
+                                    //my messages
                                 <Message key={msg._id} data={msg} />
+                                ):
+                                (
+                                    //other peoples messages
+                                     <Message key={msg._id} data={msg} />
+                                )
                             ))
 
                         }

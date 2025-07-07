@@ -20,62 +20,7 @@ function Browse() {
       .then(data => setProducts(data))
       .catch(err => {
         console.error('Error fetching products:', err);
-        setProducts([
-          {
-            name: "White Skirt",
-            description: "Elegant long flowy skirt perfect for summer outings.",
-            imageUrl: "images/white_skirt.png",
-            price: "$29"
-          },
-          {
-            name: "Red Top",
-            description: "Bold red fitted top with a square neckline.",
-            imageUrl: "images/red_top.png",
-            price: "$19"
-          },
-          {
-            name: "Flowery Top",
-            description: "Colorful floral pattern with soft fabric.",
-            imageUrl: "images/flowery_top.png",
-            price: "$25"
-          },
-          {
-            name: "White Skirt",
-            description: "Another style with side slit and pleats.",
-            imageUrl: "images/white_skirt_2.png",
-            price: "$27"
-          },
-          {
-            name: "Green Top",
-            description: "Fresh green puffed sleeve crop top.",
-            imageUrl: "images/green_top.png",
-            price: "$21"
-          },
-          {
-            name: "Naggy Jeans",
-            description: "High-rise vintage style baggy jeans.",
-            imageUrl: "images/naggy_jeans.png",
-            price: "$34"
-          },
-          {
-            name: "Gold Heels",
-            description: "Shiny gold heels to match your party outfit.",
-            imageUrl: "images/gold_heels.png",
-            price: "$49"
-          },
-          {
-            name: "Pink Dress",
-            description: "A-line soft pink dress with lace details.",
-            imageUrl: "images/pink_dress.png",
-            price: "$39"
-          },
-          {
-            name: "Purple Top",
-            description: "Sleek lavender knit top with ribbed texture.",
-            imageUrl: "images/purple_top.png",
-            price: "$22"
-          }
-        ]);
+       
       })
       .finally(() => setLoadingProducts(false));
   }, []);
