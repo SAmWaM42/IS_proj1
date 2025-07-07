@@ -20,8 +20,8 @@ function Register() {
     { label: 'phoneNumber', type: 'text', name: 'phoneNumber', key: 'phoneNumber' ,placeholder:"e.g 2547********" },
     { label: 'Select Your Role', type: 'select', name: 'role', key: 'role',value:'buyer',options:[
        {value:'buyer'},
-       {value:'seller'},
-        {value:'admin'}
+       {value:'seller'}
+      
     ]
       
     }
