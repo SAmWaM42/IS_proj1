@@ -7,16 +7,11 @@ function Card({ data }) {
   return (
     <div className="card">
       <div>
- <img
+        <img
   src={`/${data.imageUrl}`}
   alt={data.name}
   className="card-image"
-  onError={(e) => {
-    e.target.onerror = null;
-    e.target.src = '/images/default.png'; // A fallback image you place in public/images/
-  }}
 />
-
 
       </div>
       <div className="card-content">
