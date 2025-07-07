@@ -1,4 +1,4 @@
-# Thrift Shop Treasures
+# Waridi Thrifting Platform
 
 ## Overview
 
