@@ -1,7 +1,7 @@
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
-  background-color: #f8f5ee; /* Soft cream background */
+  background-colr: #f8f5ee; /* Soft cream background */
   color: #3d3d3d;
 }
 
@@ -117,6 +117,9 @@ form {
   display: flex;
   flex-direction: column;
   gap: 15px;
+  width: 100%;
+  box-sizing: border-box;
+  align-items: stretch;
 }
 
 /* Align labels and inputs vertically inside form groups */
@@ -162,4 +165,3 @@ select {
   padding-top: 50px; /* Optional: adjusts for navbar height */
   box-sizing: border-box;
 }
-

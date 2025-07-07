@@ -1,0 +1,31 @@
+.message {
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 8px;
+  max-width: 70%;
+  word-wrap: break-word;
+}
+
+.sender {
+  background-color: #ffe5b4; /* Light orange background */
+  color: #d35400; /* Darker orange text */
+  align-self: flex-end;
+  text-align: right;
+}
+
+.receiver {
+  background-color: #f1f1f1;
+  color: #333;
+  align-self: flex-start;
+  text-align: left;
+}
+
+.messages {
+  display: flex;
+  flex-direction: column;
+}
+
+.timestamp {
+  font-size: 0.75em;
+  opacity: 0.6;
+}

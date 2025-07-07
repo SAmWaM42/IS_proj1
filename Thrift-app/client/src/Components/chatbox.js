@@ -1,34 +1,30 @@
-
 import './chatbox.css';
-import React, { useState, useEffect ,useContext} from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { GlobalContext } from './ContextWrapper.js';
 
-function Message({ data }) {
+function Message({ data, isSender }) {
     return (
-        <div className="message">
+        <div className={`message ${isSender ? 'sender' : 'receiver'}`}>
             <p>{data.text}</p>
-            <p>{data.timestamp}</p>
-
+            <p className="timestamp">{data.timestamp}</p>
         </div>
     );
 }
 
-function Chatbox({ message,reload }) {
+function Chatbox({ message, reload }) {
     const [input, setInput] = useState('');
-  const contextData = useContext(GlobalContext);
-  const { myData } = contextData || {};
+    const contextData = useContext(GlobalContext);
+    const { myData } = contextData || {};
     const navigate = useNavigate();
-    const { chatId } = useParams(); // Assuming the URL contains a parameter for the chat ID or user ID
-   
+    const { chatId } = useParams();
+
     console.log(message);
     const hasMessages = message.length > 0;
- 
+
     const handleSend = async (event) => {
-          event.preventDefault();
+        event.preventDefault();
         if (input.trim()) {
-            // Here you would typically send the message to the server
             console.log('Sending message:', input);
             try {
                 const url = `http://localhost:5000/user/chats/${chatId}`;
@@ -39,10 +35,8 @@ function Chatbox({ message,reload }) {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({ text: input }),
-
                 });
                 if (!response.ok) {
-
                     const errorData = await response.json();
                     throw new Error(errorData.message || "Message not sent successfully.");
                 }
@@ -53,44 +47,28 @@ function Chatbox({ message,reload }) {
                     reload();
                 }
             } catch (err) {
-            console.error("Error sending message:", err);
-
-
+                console.error("Error sending message:", err);
             }
-
-
         }
     };
 
-
     return (
         <div className="chatbox">
-            {hasMessages?
-                (
-                   <div className="messages">
-
-                        {
-                            message.map((msg) => (
-                                (msg.SenderId===myData._id)?
-                                (
-                                    //my messages
-                                <Message key={msg._id} data={msg} />
-                                ):
-                                (
-                                    //other peoples messages
-                                     <Message key={msg._id} data={msg} />
-                                )
-                            ))
-
-                        }
-
-                    </div>
-                ) : ( <div>
-                        <h1>New Chat</h1>
-                    </div>
-                    
-                )
-            }
+            {hasMessages ? (
+                <div className="messages">
+                    {message.map((msg) => (
+                        <Message
+                            key={msg._id}
+                            data={msg}
+                            isSender={msg.SenderId === myData._id}
+                        />
+                    ))}
+                </div>
+            ) : (
+                <div>
+                    <h1>New Chat</h1>
+                </div>
+            )}
             <div className="input-area">
                 <input
                     type="text"
@@ -104,5 +82,5 @@ function Chatbox({ message,reload }) {
     );
 }
 
-
 export default Chatbox;
+
