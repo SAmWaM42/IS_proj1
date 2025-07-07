@@ -8,7 +8,7 @@ function Card({ data }) {
     <div className="card">
       <div>
         <img
-  src={`/${data.imageUrl}`}
+  src={`http://localhost:5000/${data.imageUrl}`}
   alt={data.name}
   className="card-image"
 />

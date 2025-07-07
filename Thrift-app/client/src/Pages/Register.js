@@ -20,8 +20,8 @@ function Register() {
     {
       label: 'Select Your Role', type: 'select', name: 'role', key: 'role', value: 'buyer', options: [
         { value: 'buyer' },
-        { value: 'seller' },
-        { value: 'admin' }
+        { value: 'seller' }
+       
       ]
     }
   ];

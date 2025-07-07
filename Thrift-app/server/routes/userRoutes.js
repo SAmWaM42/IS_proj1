@@ -319,13 +319,11 @@ router.get('/chats', async (req, res) => {
       let chatName = 'GroupChat';
       const otherParticipant = participants.find(p => p._id !== req.session.user.id.toString());
 
-
+    
       if (participants.length === 2) {
         chatName = otherParticipant.name;
       }
-      else {
-        chatName = "Group Chat";
-      }
+     
 
 
 

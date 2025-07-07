@@ -96,6 +96,7 @@ function UserOrders() {
             {
                throw new Error("network error while claimimg product")
             }
+            
 
          window.location.reload();
 

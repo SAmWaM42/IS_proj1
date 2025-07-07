@@ -14,8 +14,8 @@ function Browse() {
   const [LoadingProducts, setLoadingProducts] = useState(true);
   const [searchValues, setSearchValues] = useState(null);
 
-  useEffect(() => {
-    fetch(url)
+const fetchProd=async() => {
+   await fetch(url)
       .then(res => res.json())
       .then(data => setProducts(data))
       .catch(err => {
@@ -23,7 +23,11 @@ function Browse() {
        
       })
       .finally(() => setLoadingProducts(false));
-  }, []);
+  }
+  useEffect(()=>{
+
+    fetchProd();
+  },[])
 
   useEffect(() => {
     const checkSession = async () => {
@@ -65,7 +69,7 @@ function Browse() {
       console.log(err.message);
     }
   };
-
+ console.log(products);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setSearchValues(prev => ({
@@ -88,9 +92,12 @@ return (
 
     {products.length > 0 ? (
       <div className="product-list">
-        {products.map((data, index) => (
+        {
+        products.map((data, index) => (
           <Card key={index} data={data} />
-        ))}
+         
+        ))
+      }
       </div>
     ) : (
       <p>No products available</p>
