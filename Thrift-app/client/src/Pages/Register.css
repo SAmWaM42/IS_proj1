@@ -28,9 +28,11 @@ body {
 }
 
 .title {
+  font-size: 22px; /* Try 20-22px */
   color: #cc4d3c;
   margin-bottom: 20px;
 }
+
 
 input[type="text"],
 input[type="email"],
@@ -45,6 +47,7 @@ input[type="password"] {
 }
 
 .register-button {
+
   width: 100%;
   padding: 12px;
   background-color: #cc4d3c;
@@ -74,9 +77,8 @@ label {
   margin-top: 20px;
 }
 
-.login-button,
-.register-button {
-  flex: 1;
+.login-button {
+  width: 100%;
 }
 
 button.secondary {
@@ -88,3 +90,37 @@ button.secondary {
 button.secondary:hover {
   background-color: #f2c5bb;
 }
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.button-group button {
+  flex: 1;
+  padding: 12px;
+  font-weight: bold;
+  border-radius: 5px;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.page-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;  /* Align from top, not full vertical center */
+
+  background-color: #f8f5ee;
+  padding-top: 100px;  /* Adjust this to leave space for your navbar */
+  padding-bottom: 40px;
+  box-sizing: border-box;
+}
+.form-container {
+  max-width: 500px;
+  width: 100%;
+
+}
+

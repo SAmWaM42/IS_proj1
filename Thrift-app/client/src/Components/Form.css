@@ -1,59 +1,72 @@
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #f8f5ee; /* Soft cream */
-  color: #3d3d3d;
-}
-
-.register-page {
+.form-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #fffaf2;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 15px rgba(204, 77, 60, 0.15);
+  font-family: 'Segoe UI', sans-serif;
 }
 
-.register-card {
-  background-color: #ffffff;
-  padding: 40px;
-  border-radius: 15px;
-  box-shadow: 0 0 10px rgba(204, 77, 60, 0.15);
-  width: 350px;
-  text-align: center;
-  border: 1px solid #e6e3db;
+.form-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  text-align: left;
 }
 
-.logo {
-  height: 100px;
-  margin-bottom: 3px;
-}
-
-.title {
-  font-size: 22px; /* Try 20-22px */
+.form-container label {
   color: #cc4d3c;
-  margin-bottom: 20px;
+  font-weight: bold;
+  margin-bottom: 6px;
 }
 
+.input-wrapper {
+  position: relative;
+}
 
-input[type="text"],
-input[type="email"],
-input[type="password"] {
+input,
+select {
   width: 100%;
   padding: 12px;
-  margin-bottom: 15px;
   border: 1px solid #e6e3db;
   border-radius: 5px;
   background-color: #fdfcf9;
   color: #3d3d3d;
+  font-size: 1rem;
+  box-sizing: border-box;
 }
 
-.register-button {
+input:focus,
+select:focus {
+  outline: none;
+  border-color: #cc4d3c;
+  background-color: #fff2ec;
+}
 
-  width: 100%;
-  padding: 12px;
-  background-color: #cc4d3c;
-  color: #ffffff;
+.password-toggle-button {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  background: none;
   border: none;
+  color: #cc4d3c;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button {
+  padding: 12px;
+  font-size: 1rem;
   border-radius: 5px;
+  border: none;
+  background-color: #cc4d3c;
+  color: white;
   font-weight: bold;
   cursor: pointer;
   transition: background 0.3s ease;
@@ -71,39 +84,7 @@ label {
   text-align: left;
 }
 
-.button-group {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
+button:hover {
+  background-color: #a03a2e;
 }
 
-.login-button {
-  width: 100%;
-}
-
-button.secondary {
-  background-color: #f6d7ce;
-  color: #cc4d3c;
-  border: 1px solid #cc4d3c;
-}
-
-button.secondary:hover {
-  background-color: #f2c5bb;
-}
-.button-group {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.button-group button {
-  flex: 1;
-  padding: 12px;
-  font-weight: bold;
-  border-radius: 5px;
-}
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}

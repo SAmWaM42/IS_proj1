@@ -1,16 +1,20 @@
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
-  background-color: #f8f5ee; /* Soft cream background */
+  background-colr: #f8f5ee; /* Soft cream background */
   color: #3d3d3d;
 }
 
 .login-page {
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 100vh;
+  align-items: flex-start; /* start from the top */
+  min-height: 100vh;
+  padding-top: 50px; /* push below navbar */
+  background-color: #f8f5ee;
+  box-sizing: border-box;
 }
+
 
 .login-card {
   background-color: #ffffff;
@@ -97,3 +101,65 @@ label {
   cursor: pointer;
   font-weight: bold;
 }
+
+.register-page, .login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f8f5ee;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+/* Ensure form fields are stacked vertically and aligned properly */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Align labels and inputs vertically inside form groups */
+form > div {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+}
+
+/* Consistent styling for input and select fields */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select {
+  width: 100%;
+  padding: 12px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  border: 1px solid #e6e3db;
+  border-radius: 5px;
+  background-color: #fdfcf9;
+  color: #3d3d3d;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+/* Ensure form buttons are aligned and spaced properly */
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/* Fix centering of login and register cards */
+.login-page,
+.register-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding-top: 50px; /* Optional: adjusts for navbar height */
+  box-sizing: border-box;
+}
+

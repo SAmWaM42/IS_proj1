@@ -1,51 +1,108 @@
-.form-container {
-  background-color: #f9f6fb; /* subtle lavender-white blend */
+.profile-page {
   padding: 2rem;
-  border-radius: 1.5rem;
-  box-shadow: 0 4px 15px rgba(76, 42, 133, 0.2);
-  max-width: 500px;
-  margin: 2rem auto;
   font-family: 'Segoe UI', sans-serif;
+  color: #2c2c2c;
+  background-color: #fffaf2;
+}
+
+.profile-top {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.profile-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #cc4d3c;
+}
+
+.profile-info h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: #cc4d3c;
+}
+
+.stats {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+  font-size: 1rem;
+}
+
+.settings-btn {
+  margin-top: 1rem;
+  background-color: #cc4d3c;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 2rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.settings-btn:hover {
+  background-color: #a03a2e;
+}
+
+.no-posts {
+  text-align: center;
+  margin-top: 3rem;
+  font-size: 1.2rem;
+  color: #888;
+}
+
+/* Reuse your orange form styling */
+.form-container {
+  background-color: #fff4ee;
+  padding: 2rem;
+  margin-top: 2rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 15px rgba(204, 77, 60, 0.2);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .form-container label {
-  display: block;
-  margin-bottom: 0.25rem;
+  color: #cc4d3c;
   font-weight: bold;
-  color: #4c2a85;
+  margin-bottom: 0.25rem;
+  display: block;
 }
 
-.form-container input[type="text"],
-.form-container input[type="email"],
-.form-container input[type="file"],
-.form-container input[type="password"],
-.form-container input[type="number"] {
+.form-container input,
+.form-container select {
   width: 100%;
-  padding: 0.6rem;
-  margin-bottom: 1.2rem;
-  border: 1px solid #b480d6;
-  border-radius: 0.75rem;
-  background-color: #ffffff;
-  color: #4c2a85;
-  transition: border-color 0.3s ease;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #f0c3b7;
+  border-radius: 8px;
+  background-color: #fffaf6;
+  font-size: 1rem;
+  color: #333;
 }
 
-.form-container input:focus {
-  border-color: #4c2a85;
+.form-container input:focus,
+.form-container select:focus {
+  border-color: #cc4d3c;
   outline: none;
+  background-color: #fef8f6;
 }
 
 .form-container button {
-  background-color: #b480d6;
+  background-color: #cc4d3c;
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 2rem;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
 .form-container button:hover {
-  background-color: #4c2a85;
+  background-color: #a03a2e;
 }
+
